@@ -1,3 +1,24 @@
+@import './style/chat.css';
+@import './style/containers.css';
+@import './style/header.css';
+@import './style/login.css';
+@import './style/notification.css';
+@import './style/popup.css';
+@import './style/prifile.css';
+@import './style/scroll.css';
+@import './style/media.css';
+
+:root{
+    --textColor:#485550;
+    --bgColor:#c0eb6a;
+    --bgLightColor:#c0eb6a75;
+    --borderColor: #968d8d;
+    --secendColor: #ff8100;
+}
+*{
+    padding: 0;margin: 0;
+    box-sizing: border-box;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -11,3 +32,72 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+
+a{
+    text-decoration: none;
+}
+
+.singupSubmit {
+    border: none;
+    width: 100px !important;
+    margin: auto !important;
+    padding: 7px !important;
+}
+
+.otpButton,
+input[type="submit"]{
+    border: none;
+    width: 100px !important;
+    margin: auto !important;
+    padding: 7px !important;
+    border-radius: 10px;
+    font-weight: 800;
+    background-color: var(--bgColor);
+    color: var(--textColor);
+    outline: none;
+    font-size: 15px;
+    text-align: center;
+}
+
+.button{
+    width: 150px;
+    margin: auto;
+    padding: 7px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: 800;
+    background-color: var(--bgColor);
+    color: var(--textColor);
+    cursor: pointer;
+}
+.contactButton:hover,
+.button:hover,
+.button:active{
+    box-shadow: 1px 1px 3px #00000080,
+            -1px -1px 3px #ffffff;
+}
+
+.contactButton:active{
+    background-color: var(--secendColor);
+    color: var(--bgColor);
+}
+
+.none{
+    display: none;
+}
+
+label {
+    font-weight: 700;
+}
+
+::placeholder {
+    font-size: 13px;
+}
+
+
+
+
+
+/* ////// */

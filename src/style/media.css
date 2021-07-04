@@ -1,0 +1,410 @@
+@media (max-width: 1367px){
+
+    /* left header */
+    .seedInfoContainer {
+        grid-template-columns: 2fr 1.5fr 1fr;
+    }
+}
+@media (max-width: 1300px){
+        /* header */
+        .search {
+            width: 430px;
+        }
+        /* msg */
+        .mainheader{
+            grid-template-columns: 250px 1fr 300px auto;
+        }
+    /* post container */
+    .seedInfoContainer {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 49rem;
+    }
+}
+@media (max-width: 1200px){
+    .notificationInfo>div>p {
+        width: 200px;
+    }
+}
+@media (max-width: 1170px){
+    /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 45rem;
+    }
+}
+@media (max-width: 1085px){
+    /* chat */
+    .notificationInfo>div>p {
+        width: 180px;
+    }
+    /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 40rem;
+    }
+}
+@media (max-width: 1026px){
+    /* left header */
+    .seedInfoContainer .infoContainer {
+        grid-template-rows: 0.6fr 2fr;
+    }
+    .postContainer{
+        right: -26.8%;
+    }
+    /* chat */
+    .notificationInfo>div>p {
+        width: 180px;
+    }
+}
+@media (max-width: 900px){
+    /* leftheader */
+    .leftheader{
+        width: 201px;
+    }
+    input[type="range"]{
+        width: 170px;
+    }
+    .msgsendingContainer input[type='text']{
+        width: 33rem;
+    }
+    .MuiSelect-filled.MuiSelect-filled {
+        width: 120px;
+    }
+}
+@media (max-width: 990px){
+            /* header */
+            .search {
+                width: 330px;
+            }
+            .mainheader{
+                grid-template-columns: 160px 1fr 400px auto;
+            }
+            /* seed container */
+            .seedInfoContainer .priceContainer {
+            grid-template-columns: 2fr 1fr;
+            grid-template-rows: 1fr 0;
+            }
+            .sellSeed{
+                margin-top: 40px !important;
+            }
+
+            .seedInfoContainer {
+                height: 202px;
+                grid-template-columns: 1.1fr 1.4fr;
+            }
+            .priceContainer{
+                grid-area: 2/1/2/4;
+            }
+            .seedInfoContainer .infoContainer {
+                border-top-right-radius: 7px;
+                border-top: 1px solid var(--borderColor);
+                border-left: 1px solid var(--borderColor); 
+                border-bottom: 1px solid var(--borderColor);
+            }
+            .namecontainer{
+                border-top-left-radius: 7px;
+                border-top: 1px solid var(--borderColor);
+                border-bottom: 1px solid var(--borderColor);
+            }
+            .postContainer {
+                right: -28.5%;
+            }
+            .seedInfoContainer .infoContainer .info>p{
+                border: none;
+            }
+            .seedInfoContainer .namecontainer .profilePic{
+                margin: 0 20px 0 10px;
+            }
+            /* prifile */
+            .profilewin {
+                width: 60%;
+            }
+            /* chat */
+            .notificationInfo>div>p {
+                width: 170px;
+            }
+                /* msg */
+            .msgsendingContainer input[type='text']{
+                width: 35.5rem;
+            }
+            .NotificationProfilePic {
+                width: 40px;
+                height: 40px;
+            }
+            .infocard {
+                grid-template-columns: 45px 1fr;
+            }
+}
+
+@media (max-width: 914px){
+    /* seed container */
+    .sellSeed{
+        margin-top: 15px !important;
+    }
+    .notificationInfo>div>p {
+        width: 160px;
+    }
+    .msgsendingContainer input[type='text']{
+        width: 31.5rem;
+    }
+    .contactSearch {
+        width: 175px !important;
+        margin-top: 0;
+    }
+}
+@media (max-width: 830px){
+            /* header */
+            .mainheader{
+                grid-template-columns: 160px 1fr auto auto;
+            }
+            #hangBurger{
+                display: flex;
+            }
+            .mainheader nav  {
+                display: none;
+                position: absolute;
+                top: 30px;
+                z-index: 1111;
+                grid-area: 2/ 1/ 2/ 4;
+            }
+            .mainheader nav ul{
+                width: 90vw;
+                margin: 10px auto 0 auto;
+                border-radius: 10px;
+                background-color: #ffffff80;
+                backdrop-filter: blur(1px) saturate(100%) contrast(45%) brightness(130%);
+                box-shadow: 2px 2px 4px #0000003b,
+                        -2px -2px 4px #ffffff80;
+                border-top: 1px solid #ffffff;
+                border-left: 1px solid #ffffffd8;
+              
+            }
+            .mainheader nav li {
+                display: block;
+                padding-left: 40%;
+            }
+            .mainheader nav li:hover{
+                background-color: #ffffff80;
+                backdrop-filter: blur(1px) saturate(100%) contrast(45%) brightness(130%);
+                box-shadow: 2px 2px 4px #0000003b,
+                        -2px -2px 4px #ffffff80;
+                border-top: 1px solid #ffffff;
+                border-left: 1px solid #ffffffd8;
+            }
+            /* chat */
+            .notificationInfo>div>p {
+                width: 150px;
+                font-size: 14px;
+            }
+                /* msg */
+            .msgsendingContainer input[type='text']{
+                width: 29rem;
+            }
+            .notificationInfo>.date {
+                font-size: 13px;
+            }
+            nav.active li span{
+                display: inline;
+            }
+
+}
+@media (max-width: 790px){
+        /* seed container */
+        .sellSeed{
+            margin-top: 10px !important;
+        }
+        /* prifile */
+        .profilewin {
+            width: 70%;
+        }
+        /* msg */
+        .msgsendingContainer input[type='text']{
+            width: 42rem;
+        }
+        .contactAccount{
+            display: none;
+        }
+        .chatMainContainer .chatSection {
+            width: 100%
+        }
+        .contactButton{display: grid;}
+        .cencelLeftHeader{
+            display: flex !important;
+        }
+        div#search {
+            margin-top: -20px;
+        }
+        .contactAccount.active {
+            display: block;
+            width: 55%;
+            position: absolute;
+            background-color: #ffffff80;
+            backdrop-filter: blur(1px) saturate(100%) contrast(45%) brightness(130%);
+        }
+        .contactAccount.active .notificationInfo>div>p {
+            width: 300px;
+        }
+        .contactSearch {
+            width: 200px !important;
+        }
+        
+}
+@media (max-width: 775px){
+    .sellSeed{
+        margin-top: 15px !important;
+    }
+    /* notification */
+    .notification {
+        right: auto;
+    }
+    /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 39.5rem;
+    }
+}
+@media (max-width: 730px){
+    /* filter */
+    .leftheaderButton{
+        display: flex;
+    }
+    .leftheader{
+        display: none;
+        background-color: #ffffff80;
+        backdrop-filter: blur(1px) saturate(100%) contrast(45%) brightness(130%);
+    }
+    .leftheader.active{
+        display: block;
+    }
+    .leftheader {
+        width: 250px;
+        top: 0;
+    }
+    /* seed container */
+    .postContainer {
+        top: 5px;
+    }
+    .seedInfoContainer .namecontainer .profilePic{
+        margin: 0 7px 0 2px;
+    }
+    .postContainer{
+        width: 90%;
+        right: -7%;
+    }
+    /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 35rem;
+    }
+}
+
+@media (max-width: 675px){
+        /* msg */
+        .msgsendingContainer input[type='text']{
+            width: 31rem;
+        }
+        .contactAccount.active .notificationInfo>div>p {
+            width: 280px;
+        }
+}
+@media (max-width: 612px){
+    .seedInfoContainer {
+        height: 250px;
+    }
+    /* prifile */
+    .profilewin {
+        width: 85%;
+    }
+    /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 28rem;
+    }
+    .contactAccount.active .notificationInfo>div>p {
+        width: 250px;
+    }
+}
+@media (max-width: 550px){
+    /* header */
+    .mainheader {
+        grid-template-columns: 100px 1fr auto auto;
+    }
+    .search {
+        width: 230px;
+    }
+    /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 25rem;
+    }
+}
+@media (max-width: 530px){
+        .seedInfoContainer .namecontainer{
+            grid-area: 1/1/1/4;
+        }
+        .priceContainer{
+            grid-area: 3/1/3/4;
+        }
+        .infoContainer{
+            grid-area: 2/1/2/4;
+        }
+        .namecontainer {
+            border: none;
+        }
+        /* prifile */
+        .profilewin {
+            width: 100%;
+        }
+        /* msg */
+        .msgsendingContainer input[type='text']{
+            width: 21rem;
+        }
+        .contactAccount.active .notificationInfo>div>p {
+            width: 230px;
+        }
+
+}
+@media (max-width: 445px){
+    .button{
+        width: 75px !important;
+    }
+    /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 17rem;
+    }
+    .contactAccount.active .notificationInfo>div>p {
+        width: 230px;
+    }
+    .contactAccount.active {
+        width: 75%;
+    }
+}
+@media (max-width: 380px){
+    .mainheader {
+        grid-template-columns: 70px 1fr auto auto;
+    }
+    .search {
+        width: 180px;
+    }
+    /* seed container */
+    .postContainer {
+        right: -7%;
+    }
+    .seedInfoContainer .infoContainer .info {
+        grid-gap: 1px;
+        padding: 3px;
+    }
+    /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 16rem;
+    }
+    .contactAccount.active {
+        width: 80%;
+    }
+}
+@media (max-width: 355px){
+        /* msg */
+    .msgsendingContainer input[type='text']{
+        width: 13.5rem;
+    }
+    .contactAccount.active {
+        width: 100%;
+    }
+}

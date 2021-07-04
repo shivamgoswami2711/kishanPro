@@ -1,23 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Header from './component/Header';
+import Leftheader from './component/Leftheader';
+import SeedPostContainer from './component/SeedPostContainer';
+import Chat from './component/Chat';
+import Login from './component/Login';
+import Singup from './component/Singup';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Switch>
+
+         {/* singup */}
+          <Route path='/singup'>
+            {/* <Header/> */}
+            <Singup/>
+          </Route>
+
+         {/* login */}
+          <Route path='/login'>
+            <Header/>
+            <Login/>
+          </Route>
+
+         {/* chat */}
+          <Route path='/chat'>
+            <Header/>
+            <Chat/>
+          </Route>
+
+          {/* home */}
+          <Route path='/'>
+              <Header/>
+              <Leftheader/><SeedPostContainer/>
+              {/* <GoogleAutoComplete/> */}
+          </Route>
+
+        </Switch>
+      </Router>
     </div>
   );
 }

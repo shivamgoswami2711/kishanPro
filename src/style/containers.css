@@ -1,0 +1,204 @@
+/* ################################### */
+/* seed container */
+/* #################################### */
+
+.seedInfoContainer {
+    width: 100%;
+    height: 150px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    margin-bottom: 20px;
+    border: 1px solid var(--borderColor);
+    border-radius: 10px;
+}
+.seedInfoContainer .namecontainer .profilePic{
+    width: 50px;
+    height: 50px;
+    margin: 0 50px 0 20px;
+}
+.seedInfoContainer .namecontainer .profilePic img{
+    width: 100%;
+    height: 100%;
+}
+.seedInfoContainer .namecontainer h2{
+    text-transform: capitalize;
+}
+.seedInfoContainer .namecontainer{
+    display: flex;
+    align-items: center;
+}
+.seedInfoContainer .infoContainer{
+    display: grid;
+    grid-template-rows: 1fr 1.5fr;
+    border-left: 1px solid var(--borderColor);
+    border-right: 1px solid var(--borderColor);
+}
+.seedInfoContainer .infoContainer .seedName{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-bottom: 1px solid var(--borderColor);
+}
+.seedInfoContainer .infoContainer .info{
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(100px, 1fr));
+    grid-gap: 5px;
+    align-items: center;
+    padding: 10px;
+}
+.seedInfoContainer .infoContainer .info>p{
+    padding: 5px 0;
+    border-right: 1px solid var(--borderColor);
+    border-bottom: 1px solid var(--borderColor);
+}
+.seedInfoContainer .priceContainer{
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+}
+.seedInfoContainer .priceContainer .priceUp{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+
+/* ######################################################  */
+/* seed sell from */
+/* ########################################################## */
+
+
+.seedimgGallry{
+    display: flex;
+    max-height: 70px;
+    width: 300px !important;
+    overflow: auto;
+}
+.seedimgGallry>div{
+    position: relative;
+    width: 70px;height: 70px;margin-right: 1px;
+    max-width: 70px;
+    min-width: 50px;
+}
+
+/* upand down button none */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none
+}
+
+.sellForm input[type="number"]{
+    width: 20px;
+
+}
+.sellForm{
+    padding: 20px;
+}
+.sellForm>div:not(:first-child){
+    margin-top: 10px;
+}
+
+
+  /* ################################################# */
+
+.postContainer{
+    width: 70%;
+    position: relative;
+    right: -25%;
+    top: 25px;
+}
+
+.imgGallry {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.cencelImg{
+    display: none;
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    color: #fff;
+    text-shadow: -2px 0 #000;
+    font-size: 14px;
+    line-height: 10px;
+    z-index: 100;
+    cursor: pointer;
+}
+.cencelImg:hover,
+img:hover + .cencelImg{
+    display: block;
+}
+
+
+/* weather */
+.weatherContainer {
+    display: flex;
+    align-items: center;
+    justify-items: flex-end;
+    justify-content: flex-end;
+    border: 1px solid var(--borderColor);
+    margin-bottom: 10px;
+    border-radius: 5px;
+    height: 65px;
+    background-color: #bfc5cc8c;
+}
+.weatherContainer div{
+    margin-right: 50px;
+}
+
+.weatherStatus i{
+    font-size: 20px;
+}
+.weatherStatus i {
+    font-size: 35px;
+    color: #ff9108;
+}
+
+img.weatherImgStatus {
+    width: 66px;
+    height: 36px;
+}
+.weatherStatus {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+}
+
+.weatherContainer h1, .weatherContainer h3, .weatherContainer h4 {
+    line-height: 0;
+    text-transform: capitalize;
+}
+
+/* window */
+.window .hoursColumn>div{
+    background-color: rgba(255, 255, 255, 0.363);
+}
+.window .location,.window .tamp{
+    text-align: center;
+}
+.window .hoursColumn{
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 3px;
+    display: grid;
+    grid-template-columns: repeat(4, 180px);
+    grid-column-gap: 5px;
+}
+.window .temperature,.window .windStatus,.window .carrentTime {
+    display: flex;
+    justify-content: space-around;
+}
+
+.window .hoursColumn>div>div{
+    margin: 6.5px;
+}
+
+.window>div:not(:first-child){
+    max-height: 500px;
+    overflow: scroll;
+    grid-template-rows: repeat(7, 180px);
+    grid-row-gap: 5px;
+}
+.window.rowDate{
+    margin-bottom: 5px;
+}

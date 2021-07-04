@@ -1,0 +1,93 @@
+.singupSection,
+.loginSection{
+    height: 94.5vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.loginContainer,.singupContainer{
+    border: 1px solid var(--borderColor);
+    width: 300px;
+    border-radius: 8px;
+}
+input[type="email"],
+input[type="text"]{
+    width: 17rem;
+    height: 1.4rem;
+}
+
+.loginContainer{
+    display: grid;
+    grid-template-rows: 100px 60px 50px 60px 70px;
+    place-items: center;
+}
+
+.forget{
+    text-align: center;
+    margin: 10px;
+    color: blue;
+    cursor: pointer;
+}
+
+.loginref,
+.singinref{
+    display: flex;
+    color: blue;
+    cursor: pointer;
+    padding-bottom: 11px;
+}
+.loginref .Login,
+.singinref .Singin{
+    margin-right: 10px;
+}
+.loginref{
+    margin-bottom:20px;
+}
+/* .otp{
+    display: none;
+} */
+
+
+/* ####################################### */
+
+
+.singupContainer{
+    display: grid;
+    grid-template-rows: repeat(auto-fit, 110px);
+    place-items: center;
+}
+
+.singupContainer>h1{
+    font-size: 26px;
+    color: var(--textColor);
+}
+
+.loginContainer input[type="email"],.loginContainer input[type="text"] ,
+.singupContainer input[type="email"],.singupContainer input[type="text"] {
+    width: 16rem;
+    font-size: 16px;
+}
+
+.loginContainer label,
+.singupContainer label{
+    font-size: 17px;
+    color: var(--textColor);
+    
+}
+
+.loginContainer>div,
+.singupContainer>div{
+    margin-top: 3px;
+}
+
+.SubmitOtp{
+    margin-top: 20px !important;
+}
+
+form>div:not(:first-child){
+    margin-top: 5px;
+}
+.loginref{
+    margin-top: 15px !important;
+}

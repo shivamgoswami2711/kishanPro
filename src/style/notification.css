@@ -1,0 +1,72 @@
+/* ################################################################################ */
+.notification{
+    position: absolute;
+    top: 50px;
+    right: 130px;
+    color: var(--textColor);
+}
+
+.cardWindow{
+    margin-top: 10px;
+    max-height: 520px;
+    overflow-y: auto;
+}
+.notification>h3{
+    top: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    background-color: #c0eb6ab2;
+    margin-top: -20px;
+    padding: 5px;
+    text-transform: capitalize !important;
+    color: var(--textColor);
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    z-index: -99;
+}
+
+.infocard{
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    place-items: center;
+    height: 65px;
+    overflow: hidden;
+    margin-top: 10px;
+    background-color: #ffffff3f;
+    backdrop-filter: blur(1px) saturate(100%) contrast(45%) brightness(130%);
+}
+.NotificationProfilePic{
+    width: 50px;
+    height: 50px;
+}
+.NotificationProfilePic>img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.notificationInfo p{
+    white-space: nowrap; 
+    overflow: hidden;
+    /* width: 350px; */
+    text-overflow: ellipsis;
+}
+.notificationInfo>div>p{
+    height: 20px;
+    width: 230px;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color: var(--textColor);
+}
+.notificationInfo>.date{
+    text-align: right;
+    font-weight: 800;
+    margin-right: 20px;
+}
+span.cencel:hover{
+    color: rgb(255, 5, 5);
+}
+span.cencel:hover + h3 {
+    background: #ff000010;
+}
