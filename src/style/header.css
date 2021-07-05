@@ -153,6 +153,11 @@ input[type="range"]{
 .button.newPrice{
     width: 100px !important;
 }
+.button::selection{
+    -moz-user-select: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
 
 ul.submenu {
     width: 150px;

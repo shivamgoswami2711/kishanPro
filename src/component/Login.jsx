@@ -77,7 +77,6 @@ function Login() {
 
       // sand OTP
       const signInWithPhoneNumber = async () => {
-        // history.push("/")
         if (number.length>=10 && 13>=number.length) {
           // remove extra part in number
           let tenNumber = number.substring(number.length-10, number.length);

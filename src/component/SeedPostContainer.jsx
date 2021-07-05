@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import WeatherComponent from './WeatherComponent';
 
-
 const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
@@ -36,7 +35,6 @@ function SeedPostContainer() {
     const [quality, setQuality] = React.useState('');
     const [windowName, setWindowName] = React.useState('');
     const [files, setFiles] = React.useState([]);
-
 
     function uploadImgFile(e){
         let allfiles=[]

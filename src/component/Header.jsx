@@ -145,7 +145,7 @@ function Header() {
     const notification = e=>{
         return(
             <div className="popup"><div className="notification window">
-            <span className="cencel" onClick={cencelWindow}>X</span>
+            <span className="cencel" onClick={()=> setWindowName('')}>X</span>
             <h3>Notification</h3> 
             <div className="cardWindow">
                 <div className="infocard">
@@ -237,7 +237,7 @@ function Header() {
         return(
             <div className="popup">
                 <div className="profilewin window">
-                    <span className="cencel" onClick={cencelWindow}>X</span>
+                    <span className="cencel" onClick={()=> setWindowName('')}>X</span>
                     <div>
                         <div className="profileImgcontainer">
                         <div className="circle">
@@ -315,8 +315,6 @@ function Header() {
             </div>    
         )
     }
-    
-    const cencelWindow = () => setWindowName('')
 
     // set window which window isw open
     const puppopWindow = e=>{

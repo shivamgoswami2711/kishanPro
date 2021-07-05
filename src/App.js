@@ -13,13 +13,11 @@ function App() {
 
          {/* singup */}
           <Route path='/singup'>
-            {/* <Header/> */}
             <Singup/>
           </Route>
 
          {/* login */}
           <Route path='/login'>
-            <Header/>
             <Login/>
           </Route>
 

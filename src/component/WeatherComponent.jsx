@@ -1,13 +1,13 @@
 import React,{useState} from 'react'
 
 function WeatherComponent() {
-    const [weather, setWeather] = useState(window.localStorage.data !== undefined?JSON.parse(window.localStorage.weatherData) :{weather:[{description:'',main:''}],main:{},sys:{},wind:{deg:"",speed:""}});
+    const [weather] = useState(window.localStorage.data !== undefined?JSON.parse(window.localStorage.weatherData) :{weather:[{description:'',main:''}],main:{},sys:{},wind:{deg:"",speed:""}});
     const [date, setDate] = useState(new Date())
     const [windowName, setWindowName] = useState('');
     const [tamp, setTamp] = useState([])
 
     // to stop infainite reander
-    var time = setInterval(()=>setDate(new Date()), 500 )
+   setInterval(()=>setDate(new Date()), 60000 )
 
     const monthName=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"]
 
@@ -15,7 +15,7 @@ function WeatherComponent() {
     // kelvin to celsius change funcation 
     const kelvinToCelsius=()=>  setTamp([(weather.main.temp_min - 273.15).toFixed(2),(weather.main.temp_max - 273.15).toFixed(2)])
 
-    setInterval(()=>kelvinToCelsius(),100)
+    setInterval(()=>kelvinToCelsius(),60000)
 
     // wind direction calulate using deg
     function directionFunc(d) {
@@ -31,7 +31,7 @@ function WeatherComponent() {
         return (<div className="popup">
                     <div className="window">
                         <span className="cencel" onClick={() => setWindowName('')}>X</span>
-                        <div>
+                        <div className="weatherForcastContainer">
                         <div className="location">
                             <h1>{weather.name}</h1><br />
                         </div>
@@ -109,4 +109,4 @@ function WeatherComponent() {
     )
 }
 
-export default WeatherComponent
+export default React.memo(WeatherComponent) 

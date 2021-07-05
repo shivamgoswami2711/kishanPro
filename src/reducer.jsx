@@ -1,16 +1,15 @@
 export const initalState = {
-    user:['shivam']
+    user:[{hello:'hey'}]
 }
-const reducer = (state, action) => {
+const reducer = (state, action) =>  {
     switch (action.type) {
-        case 'inc':
-            console.log(state)
+        case 'ADD_TO_CART':
             return {
                 ...state,
-                user:[...state.user,action.id]
+                user: [...state.user, ...action.id],
             };
-        default:
-            return state;
-    };
-}
+            default:
+                return { ...state.user,...action.id}
+        }
+};
 export default reducer

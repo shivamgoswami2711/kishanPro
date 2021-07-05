@@ -10,7 +10,6 @@ const apiKey= '2af3b76572ec89eebe41fdee001b8aae';
         }
     });
     window.localStorage.setItem('weatherData', JSON.stringify(data.data));
-    console.log(JSON.parse(window.localStorage.weatherData))
     return data.data;
 }
 

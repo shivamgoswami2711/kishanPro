@@ -72,6 +72,11 @@ input[type="submit"]{
     color: var(--textColor);
     cursor: pointer;
 }
+.laftHeaderTab,.button{
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
 .contactButton:hover,
 .button:hover,
 .button:active{
