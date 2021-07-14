@@ -67,6 +67,9 @@
 /* seed sell from */
 /* ########################################################## */
 
+.seedPriceConatainer{
+    display: flex;
+}
 
 .seedimgGallry{
     display: flex;
@@ -111,6 +114,15 @@ input[type=number]::-webkit-outer-spin-button {
 .imgGallry {
     margin-left: 10px;
     margin-top: 10px;
+}
+.newPriceSubmitButton{
+    margin-bottom: 20px !important;
+}
+.MuiSlider-root {
+    width: 70%;
+}
+.MuiSelect-filled.MuiSelect-filled{
+    padding-right: 32px !important;
 }
 .cencelImg{
     display: none;
@@ -201,4 +213,101 @@ img.weatherImgStatus {
 }
 .window.rowDate{
     margin-bottom: 5px;
+}
+
+/* formQuestion */
+
+.formQuestion,.cowBullPostContainer{
+    margin: 15px;
+}
+.cowBullPostContainer {
+    width: 600px;
+}
+.cowBullPostWrite {
+    max-width: 358px;
+}
+.cowBullPostContainer input[type="number"]{
+    width: 200px;
+}
+
+.cowBullPostContainer input[type="text"],.equipment input[type="text"] { max-width: 200px;}
+textarea#question,.inputUrl,.cowBullPostContainer input[type="text"] ,.equipment input[type="text"]{
+    border-radius: 5px;
+    margin-top: 5px;
+    background: #ffffff4f;
+    border: 1px solid #ffffff;
+    font-size: 15px;
+    padding: 10px;
+    margin: 10px;
+    outline: none;
+   
+}
+.inputUrl,.cowBullPostContainer input[type="text"],.equipment input[type="text"]{
+    width: 200px;
+}
+.VegetablesContainer textarea#question,.inputUrl,.cowBullPostContainer input[type="text"],.equipment input[type="text"]{
+    width: 150px;
+}
+.linkImgContainer,.cowBullPostContainer,.row,.animalPricecontainer,.animalfromLeftSelectionContainer{
+    display: flex;
+    justify-content: space-around;
+}
+.cowBullPostContainer .linkImgContainer{
+    margin-top: 5px;
+}
+.inputUrl{
+    margin-bottom: 7px;
+}
+
+
+.window .MuiOutlinedInput-input {
+    padding: 6.5px 14px;
+}
+.window .MuiInputLabel-outlined {
+    transform: translate(14px, 9px) scale(1);
+}
+.window .makeStyles-formControl-6 {
+    height: 35px;
+    margin: 0 !important;
+    min-width: 120px;
+    background-color: #ffffff4f;
+}
+.VegetablesContainer .unit .makeStyles-formControl-6{
+    min-width: 50px !important;
+}
+ul.MuiList-root.MuiMenu-list.MuiList-padding {
+    height: 200px;
+}
+.MuiFormControl-root ,
+.makeStyles-formControl-25 {
+    margin-left: 11px !important;
+}
+.MuiOutlinedInput-notchedOutline{
+    border-color: #ffffff !important;
+    border-radius: 2px;
+}
+
+.formLinkImg {
+    display: flex;
+    width: 50px;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.formSubmit{
+    margin-top: 20px !important;
+}
+
+
+input.inputUrl.Price {
+    border: 1px solid var(--bgColor);
+}
+
+.msgContainer {
+    margin: 0 60px;
+    background: #ff000030;
+    color: #fffbfb;
+    padding: 4px;
+    border-radius: 5px;
+    border: 1px solid #fff;
 }

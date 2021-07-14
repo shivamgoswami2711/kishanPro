@@ -5,7 +5,7 @@ function ContactMsg() {
         <div className="mainContactContainer">
             <div className="infocard chatCard">
                 <div className="NotificationProfilePic">
-                    <img src="./profile.jpg" alt=""/>
+                    <img src="./profile.jpg" alt="" />
                 </div>
                 <div className="notificationInfo chatInfo">
                     <h3>shivam</h3>
@@ -26,7 +26,7 @@ export const Throttle = (func, timeFrame) => {
             lastTime = now;
         }
     };
-  }
+}
 
-  
-export {ContactMsg}
+
+export { ContactMsg }

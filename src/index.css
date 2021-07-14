@@ -63,7 +63,7 @@ input[type="submit"]{
 
 .button{
     width: 150px;
-    margin: auto;
+    margin: 10px auto 10px auto;
     padding: 7px;
     border-radius: 10px;
     text-align: center;
@@ -95,6 +95,10 @@ input[type="submit"]{
 
 label {
     font-weight: 700;
+    text-transform: capitalize;
+}
+label.topLabel{
+    line-height: 30px;
 }
 
 ::placeholder {

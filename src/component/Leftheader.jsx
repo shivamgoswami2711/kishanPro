@@ -1,376 +1,239 @@
-import React,{useState} from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
+import React, { useState, useEffect } from 'react'
+import CowPost from './Form/CowPost';
+import CowBullPost from './Form/CowBullPost';
+import FormQuestion from './Form/FormQuestion';
+import Tector from './Form/Tector';
+import Equipment from './Form/Equipment';
+import Vegetables from './Form/Vegetables';
+import Pesticide from "./Form/Pesticide"
+import BuffaloPost from './Form/BuffaloPost';
+import BuffaloBullPost from './Form/BuffaloBullPost';
+import GoatPost from "./Form/GoatPost"
+import GoatBullPost from "./Form/GoatBullPost"
+import DogPost from "./Form/DogPost"
+import HenBullPost from "./Form/HenBullPost"
+import Images from './asset/Index';
 import firebase from '../firebase'
 import 'firebase/auth';
 import 'firebase/analytics';
 import 'firebase/firestore';
-import Market from './asset/cart.png';
-import Form from './asset/form.png';
-import information from './asset/information.png';
-import hashtag from './asset/hashtag.png';
-import SeedIcon from './asset/seed.png';
-import Warehouse from './asset/wearhouse.png';
-import Cow from './asset/cow.png';
-import Pesticide from './asset/pesticide.png';
-import Tractor from './asset/tractor.png';
-import Cultivator from './asset/cultivator.png';
-import Vegetables from './asset/vegetables.png';
-import LightBulb from './asset/lightBulb.png';
-import Buffalo from './asset/buffalo.png';
-import Goat from './asset/goat.png';
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
 
 
 function Leftheader() {
-    const classes = useStyles();
-    const [Seed, setSeed] = useState('');
-    const [quality, setQuality] = useState('');
     const [windowName, setWindowName] = useState([]);
-    const [PriceType, setPriceType] = useState(false)
-    const [Fungus, setFungus] = useState(0)
-    const [files, setFiles] = useState([]);
-    const [LowPrice, setLowPrice] = useState(0);
-    const [HighPrice, setHighPrice] = useState(0);
-    const [EcjectPrice, setEcjectPrice] = useState(0);
-    const [ClickImg, setClickImg] = useState('');
+    const [windowOpenCloce, setWindowOpenCloce] = useState(false)
+    let data;
 
- 
+    useEffect(() => {
+
+        return () => {
+            data = ''
+        }
+    }, [data])
     // firebase 
     const auth = firebase.auth();
-    const db   = firebase.firestore();
+    const db = firebase.firestore();
     const user = auth.currentUser;
-    let allfiles=[]
-    
-    const popupSection = () =>{
-        switch (windowName[windowName.length-1]) {
-            case 'newPricePost':
-                return newPricePost()
+
+
+    const popupSection = () => {
+        switch (windowName[windowName.length - 1]) {
             case 'CreatePost':
-                return CreatePost();        
+                return <CreatePost />
             case 'marketSell':
-                return marketSell();        
+                return <MarketSell />;
             case 'AnimalType':
-                return AnimalType();        
+                return <AnimalType />;
+            case 'formQuestion':
+                return <FormQuestion />;
+            case 'tectorPost':
+                return <Tector />;
+            case 'equipment':
+                return <Equipment />
+            case 'Vegetables':
+                return <Vegetables />;
+            case 'Pesticide':
+                return <Pesticide />;
+            // case 'otherPostType':
+            //     return formQuestion("other");
+            case 'cowPost':
+                return <CowPost />;
+            case 'cowBullPost':
+                return <CowBullPost />;
+            case 'BuffaloPost':
+                return <BuffaloPost />;
+            case 'BuffaloBullPost':
+                return <BuffaloBullPost />
+            case 'goatPost':
+                return <GoatPost />;
+            case 'goatMalePost':
+                return <GoatBullPost />
+            case 'henPost':
+                return <HenBullPost />;
+            case 'dogPost':
+                return <DogPost/>;
             default:
                 break;
         }
     }
 
-
-    const priceFun = e =>{
-        switch (e.target.name) {
-            case "lowPrice":
-                setLowPrice(e.target.value);
-                break;
-            case "highPrice":
-                setHighPrice(e.target.value);
-                break;
-            case "price":
-                setEcjectPrice(e.target.value);
-                break;
-            default:
-                break;
-            }
-    }
-
-    const newPriceSubmit = ()=>{
-        const PriceDetaile = []
-        const date = new Date();
-        const currentData = date.getSeconds() +":"+ date.getMinutes() + ":"+ date.getHours() + ":" + date.getFullYear()
-
-        PriceType ? PriceDetaile.push(LowPrice,HighPrice):PriceDetaile.push(EcjectPrice)
-        console.log(PriceDetaile)
-
-
-        db.collection("user").doc(user.uid).collection("userpost").doc(currentData).set({
-                seed: Seed,
-                quality:quality,
-                Fungus:Fungus,
-                price:PriceDetaile
-          }).then(() => {
-                console.log("Document successfully written!");
-                alert('successfully');
-                  window.location = '/';
-          }).catch((error) => {
-              console.error("Error writing document: ", error);
-          });
-    }
-
-    function AnimalType(){
-        return(
-        <div className="popup">
-            <div className="window">
-            {console.log(windowName.pop())}
-                <span className="cencel" onClick={()=>setWindowName(windowName.slice(0, windowName.length-1))}>X</span>
-                <div class="postType marketSellType">
-                    <div class="postTypeContainer" >
-                        <div><img src={Cow} alt=""/>
-                            <h4>cow/bull/calf</h4>
-                        </div>
+    // select animaltype 
+    function AnimalType() {
+        return (
+            <div className="postType marketSellType">
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "cowPost"])}>
+                    <div><img src={Images.cowSell} alt="" />
+                        <h4>cow/calf</h4>
                     </div>
-                    <div class="postTypeContainer" >
-                        <div><img src={Buffalo} alt=""/>
-                            <h4>buffalo</h4>
-                        </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "cowBullPost"])}>
+                    <div><img src={Images.bull} alt="" />
+                        <h4>Bull/calf</h4>
                     </div>
-                    <div class="postTypeContainer" >
-                        <div><img src={Goat} alt=""/>
-                            <h4>goat</h4>
-                        </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "BuffaloPost"])}>
+                    <div><img src={Images.Buffalo} alt="" />
+                        <h4>buffalo</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "BuffaloBullPost"])}>
+                    <div><img src={Images.buffaloBull} alt="" />
+                        <h4>Buffalo Bull</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "goatPost"])}>
+                    <div><img src={Images.Goat} alt="" />
+                        <h4>goat</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "goatMalePost"])}>
+                    <div><img src={Images.goatMale} alt="" />
+                        <h4>bucks/billys</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "henPost"])}>
+                    <div><img src={Images.Hen} alt="" />
+                        <h4>hen</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "dogPost"])}>
+                    <div><img src={Images.Dog} alt="" />
+                        <h4>dog</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "cowBullPost"])}>
+                    <div><img src={Images.LightBulb} alt="" />
+                        <h4>Other</h4>
                     </div>
                 </div>
             </div>
-        </div>
         )
     }
 
     // sell other prodect (market sell)
-    function marketSell(){
-        return(
-        <div className="popup">
-            <div className="window">
-                {console.log(windowName[0])}
-                <span className="cencel" onClick={()=>setWindowName(windowName.slice(0, windowName.length-1))}>X</span>
-                <div class="postType marketSellType">
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"AnimalType"])}>
-                            <div><img src={Cow} alt=""/>
-                                <h4>animal</h4>
-                            </div>
-                        </div>
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"newPricePost"])}>
-                            <div><img src={Tractor} alt="" />
-                                <h4>Tractor</h4>
-                            </div>
-                        </div>
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"newPricePost"])}>
-                            <div><img src={Cultivator} alt="" />
-                                <h4>equipment</h4>
-                            </div>
-                        </div>
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"newPricePost"])}>
-                            <div><img src={Vegetables} alt="" />
-                                <h4>Vegetables</h4>
-                            </div>
-                        </div>
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"newPricePost"])}>
-                            <div><img src={Pesticide} alt="" />
-                                <h4>Pesticide</h4>
-                            </div>
-                        </div>
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"newPricePost"])}>
-                            <div><img src={LightBulb} alt="" />
-                                <h4>other</h4>
-                            </div>
-                        </div>
+    function MarketSell() {
+        return (
+            <div className="postType marketSellType">
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "AnimalType"])}>
+                    <div><img src={Images.Cow} alt="" />
+                        <h4>animal</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "tectorPost"])}>
+                    <div><img src={Images.Tractor} alt="" />
+                        <h4>Tractor</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "equipment"])}>
+                    <div><img src={Images.Cultivator} alt="" />
+                        <h4>equipment</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "Vegetables"])}>
+                    <div><img src={Images.Vegetables} alt="" />
+                        <h4>Vegetables</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer Fertilizer" onClick={() => setWindowName([...windowName, "Pesticide"])}>
+                    <div><img src={Images.Pesticide} alt="" />
+                        <h4>Pesticide<br />Fertilizer</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "otherPostType"])}>
+                    <div><img src={Images.LightBulb} alt="" />
+                        <h4>other</h4>
+                    </div>
                 </div>
             </div>
-        </div>
         )
     }
 
     // show type of post selection 
-    function CreatePost(){
-        return(
-            <div className="popup">
-                    <div className="window">
-                        <span className="cencel" onClick={()=>setWindowName(windowName.slice(0, windowName.length-1))}>X</span>
-                        <div class="postType">
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"marketSell"])}>
-                            <div><img src={Market} alt=""/>
-                                <h4>Market sell</h4>
-                            </div>
-                        </div>
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"newPricePost"])}>
-                            <div><img src={Form} alt="" />
-                                <h4>form</h4>
-                            </div>
-                        </div>
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"newPricePost"])}>
-                            <div><img src={information} alt="" />
-                                <h4>information</h4>
-                            </div>
-                        </div>
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"newPricePost"])}>
-                            <div><img src={SeedIcon} alt="" />
-                                <h4>seed Sell</h4>
-                            </div>
-                        </div>
-                        <div class="postTypeContainer" onClick={()=>setWindowName([...windowName,"newPricePost"])}>
-                            <div><img src={Warehouse} alt="" />
-                                <h4>wearhouse</h4>
-                            </div>
-                        </div>
-                    </div> 
+    function CreatePost() {
+        return (
+
+            <div className="postType">
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "marketSell"])}>
+                    <div><img src={Images.Market} alt="" />
+                        <h4>Market sell</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "formQuestion"])}>
+                    <div><img src={Images.Form} alt="" />
+                        <h4>form</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "newPricePost"])}>
+                    <div><img src={Images.information} alt="" />
+                        <h4>information</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "newPricePost"])}>
+                    <div><img src={Images.SeedIcon} alt="" />
+                        <h4>seed Sell</h4>
+                    </div>
+                </div>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "newPricePost"])}>
+                    <div><img src={Images.Warehouse} alt="" />
+                        <h4>wearhouse</h4>
+                    </div>
                 </div>
             </div>
+
         )
     }
 
-    // new price window
-    function newPricePost(){
-        function uploadImgFile(e){
-                // second time uplode
-                for(let i=0;i<e.target.files.length;i++){
-                    allfiles.push(e.target.files[i]);
-                }
-                if(allfiles.length>0){
-                    console.log(...allfiles)
-                    setFiles(Object.assign(allfiles,files)) 
-                }
-        };
-        // remove img
-        const removeImg = e => setFiles(files.filter((i, index) => index !== e.target.id))
-        // show img
-        const showClickImg = e => {
-            setClickImg(e.target.src)
-        }
-            // 
-            return(
-                <div className="popup">
-                    <div className="window">
-                        <span className="cencel" onClick={()=>setWindowName(windowName.slice(0, windowName.length-1))}>X</span>
-                        <div className="imgGallry">
-                        <div><label for="seedImg"><i className="fa fa-camera upload-button"></i></label><input className="file-upload" type="file" id="seedImg" accept="image/*" multiple  onChange={uploadImgFile}/></div>
-                        <div className="seedimgGallry">
-                        <span className="cencel">X</span>
-                            {files.map((file, key) =><div><img onClick={showClickImg} alt='' src={URL.createObjectURL(file)}/><span className="cencelImg" onClick={removeImg}  id={key} >X</span></div>)}
-                            </div>
-                           {ClickImg!==""?
-                           <div className="popupImg">
-                                <div className="windowImg">
-                                    <img onClick={()=>setClickImg("")} src={ClickImg} alt=''/>
-                                </div>
-                            </div>:""}
-                    </div> 
-
-                        <div className="sellForm">
-                        <FormControl variant="filled" className={classes.formControl}>
-                                        <InputLabel id="demo-simple-select-filled-label">Seed</InputLabel>
-                                        <Select
-                                        labelId="demo-simple-select-filled-label"
-                                        id="demo-simple-select-filled"
-                                        value={Seed}
-                                        onChange={event=>setSeed(event.target.value)}
-                                        >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
-                                        </Select>
-                            </FormControl>
-                            <div>
-                                <label for="price">Add low and high price</label><br/>
-                                <input type="checkbox" 
-                                name="priceType"
-                                id="priceType"
-                                onClick={e=>e.target.checked ? setPriceType(true):setPriceType(false)}
-                                />
-                                {PriceType?<>
-                                    <div className="price">
-                                        <label for="lowPrice">Low Price</label><br/>
-                                        <input type="text" name="lowPrice" id="lowPrice" placeholder='lowPrice' value={LowPrice} required onChange={priceFun}/>                    
-                                    </div>
-                                    <div className="price">
-                                        <label for="highPrice">High Price</label><br/>
-                                        <input type="text" name="highPrice" id="highPrice" placeholder='highPrice' value={HighPrice} required onChange={priceFun}/>                    
-                                    </div>
-                                </>:<div className="price">
-                                    <label for="price">Price</label><br/>
-                                    <input type="text" name="price" id="price" placeholder='price' value={EcjectPrice} required onChange={priceFun}/>                    
-                                </div>
-                                }
-                            </div>
-
-                                    <FormControl variant="filled" className={classes.formControl}>
-                                        <InputLabel id="demo-simple-select-filled-label">Quality </InputLabel>
-                                        <Select
-                                        labelId="demo-simple-select-filled-label"
-                                        id="demo-simple-select-filled"
-                                        value={quality}
-                                        onChange={event=>setQuality(event.target.value)}
-                                        >
-                                        <MenuItem value="">
-                                            <em>None</em>
-                                        </MenuItem>
-                                        <MenuItem value={"High"}>High</MenuItem>
-                                        <MenuItem value={"Medium"}>Medium</MenuItem>
-                                        <MenuItem value={"Low"}>Low</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                            <Typography id="discrete-slider" gutterBottom>Moisture</Typography>
-                                        <Slider
-                                            defaultValue={1}
-                                            getAriaValueText={value=>`${value}%`}
-                                            aria-labelledby="discrete-slider"
-                                            valueLabelDisplay="auto"
-                                            step={1}
-                                            marks
-                                            min={1}
-                                            max={20}
-                                        />
-                                        <Typography id="discrete-slider" gutterBottom>Fungus</Typography>
-                                        <Slider
-                                            defaultValue={1}
-                                            getAriaValueText={value=>setFungus(value)}
-                                            aria-labelledby="discrete-slider"
-                                            valueLabelDisplay="auto"
-                                            step={1}
-                                            marks
-                                            min={1}
-                                            max={20}
-                                        />
-                            <div className="button" onClick={newPriceSubmit}>Post</div>
-                        </div> 
-                    </div>
-                </div>
-            )
-        }
-
-    
-
     return (
         <>
-        <section>
-            <div className="leftheaderButton">
-                <div className="button filterbtn">Filter</div>
-                <div className="button newPrice" onClick={()=>setWindowName(['CreatePost'])}>New price</div>
-            </div>
-            <div className="leftheader">
-                <span className="cencelLeftHeader" onClick={()=>setWindowName(windowName.slice(0, windowName.length-1))}>X</span>
-                <div>
-                    <div className="button newPrice" onClick={()=>setWindowName(['CreatePost'])}>new price</div>
+            <section>
+                <div className="leftheaderButton">
+                    <div className="button filterbtn">Filter</div>
+                    <div className="button newPrice" onClick={() => setWindowName(['CreatePost'])}>New price</div>
                 </div>
-                <div>
-                   <div className='laftHeaderTab'><div><img src={Market} alt="" /></div><div><h1>Market</h1></div></div>
-                   <div className='laftHeaderTab'><div><img src={Form} alt="" /></div><div><h1>form</h1></div></div>
-                   <div className='laftHeaderTab'><div><img src={information} alt="" /></div><div><h1>Knowledge</h1></div></div>
-                   <div className='laftHeaderTab'><div><img src={hashtag} alt="" /></div><div><h1>Follew</h1></div></div>
-                   <div className='laftHeaderTab'><div><img src={Warehouse} alt="" /></div><div><h1>Warehouse</h1></div></div>
+                <div className="leftheader">
+                    <span className="cencelLeftHeader" onClick={() => setWindowName(windowName.slice(0, windowName.length - 1))}>X</span>
+                    <div>
+                        <div className="button newPrice" onClick={() => { setWindowOpenCloce(true); setWindowName(['CreatePost']) }}>new price</div>
+                    </div>
+                    <div>
+                        <div className='laftHeaderTab'><div><img src={Images.Market} alt="" /></div><div><h1>Market</h1></div></div>
+                        <div className='laftHeaderTab'><div><img src={Images.Form} alt="" /></div><div><h1>form</h1></div></div>
+                        <div className='laftHeaderTab'><div><img src={Images.information} alt="" /></div><div><h1>Knowledge</h1></div></div>
+                        <div className='laftHeaderTab'><div><img src={Images.hashtag} alt="" /></div><div><h1>Follew</h1></div></div>
+                        <div className='laftHeaderTab'><div><img src={Images.Warehouse} alt="" /></div><div><h1>Warehouse</h1></div></div>
+                    </div>
                 </div>
-            </div>
-        </section>
-        <section className="popupSection"> 
-            {popupSection()}
-        </section>
+            </section>
+            <section className="popupSection">
+                {windowOpenCloce ? (<div className="popup">
+                    <div className="window">
+                        <span className="cencel" onClick={() => { setWindowName(windowName.slice(0, windowName.length - 1)); windowName.length === 1 ? setWindowOpenCloce(false) : setWindowOpenCloce(true) }}>X</span>
+                        {popupSection()}
+                    </div>
+                </div>) : (<></>)}
+            </section>
         </>
     )
 }
 
-export default Leftheader
+export default React.memo(Leftheader)
