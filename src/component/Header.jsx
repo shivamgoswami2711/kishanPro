@@ -14,7 +14,6 @@ import defaultProfilePic from "./asset/profile.jpg";
 // firebase
 import firebase from '../firebase'
 import 'firebase/auth';
-import 'firebase/analytics';
 import 'firebase/firestore';
 
 
@@ -66,7 +65,6 @@ function Header() {
   const [dataInfo, setDataInfo] = useState(window.localStorage.data !== undefined || window.data !== undefined ? typeof (Storage) !== "undefined" ? JSON.parse(window.localStorage.data) : JSON.parse(window.data) : "")
   const history = useHistory();
   const [ClickImg, setClickImg] = useState('');
-
   // const [classnameUpload, setClassnameUpload] = useState('');
   // const [profileProgtrss, setProfileProgtrss] = useState('');
 
@@ -74,6 +72,7 @@ function Header() {
   const auth = firebase.auth();
   const db = firebase.firestore();
   const storageRef = firebase.storage().ref();
+
   const user = auth.currentUser;
 
   // user not login 
@@ -222,9 +221,6 @@ function Header() {
           <div>
             <div className="profileImgcontainer">
               <div className="circle">
-                {console.log(dataInfo.profilePic === undefined)}
-                {console.log(dataInfo.profilePic)}
-                {console.log(dataInfo)}
                 <img className="profile-pic" onClick={showClickImg} src={dataInfo.profilePic === undefined || dataInfo.profilePic === "" ? profilePic : dataInfo.profilePic} alt="" />
               </div>
               <div className="p-image">
@@ -312,6 +308,9 @@ function Header() {
     <>
       <header>
         <div className="mainheader">
+          <div className="backArrow" onClick={()=>history.goBack()}>
+            <i className="fas fa-arrow-left"></i>
+          </div>
           <div className="logo"><img src="" alt="" /></div>
           <div><input className="search" type="search" name="" id="" /></div>
           <nav>

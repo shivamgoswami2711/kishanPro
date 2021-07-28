@@ -6,10 +6,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import firebase from '../../firebase'
 import dataBrandAndBreed from '../Data'
-import {useStateValue} from "../../Stateprovider"
+import { useStateValue } from "../../Stateprovider"
 import 'firebase/auth';
-import 'firebase/analytics';
 import 'firebase/firestore';
+const geofire = require('geofire-common');
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -50,7 +50,7 @@ export default function GoatBullPost() {
 
 
     const removeImg = e => setFiles(files.filter((i, index) => index != e.target.id))
-   const animalFromSubmit = () => {
+    const animalFromSubmit = () => {
         if (breed.length === 0) {
             setErrorMsg("breed not selected")
         } else if (EcjectPrice === 0) {
@@ -60,15 +60,22 @@ export default function GoatBullPost() {
         } else if (description > 251) {
             setErrorMsg("Description is long")
         } else {
+            const lat = state.data.coord.lat
+            const lon = state.data.coord.lon
+            const hash = geofire.geohashForLocation([lat, lon]);
             setErrorMsg(null)
             dispatch({
-                type :"POST",
-                data:{Uid: user.uid,
-                animal: "GoatBull",
-                breed: breed,
-                price: EcjectPrice,
-                animalAge: animalAge,
-                description: description},
+                type: "POST",
+                data: {
+                    Uid: user.uid,
+                    Geohash: hash,
+                    geopoint: [lat, lon],
+                    animal: "GoatBull",
+                    breed: breed,
+                    price: EcjectPrice,
+                    animalAge: animalAge,
+                    description: description
+                },
                 files: files
             })
         }

@@ -7,12 +7,15 @@
 @import './style/prifile.css';
 @import './style/scroll.css';
 @import './style/media.css';
+@import './style/post.css';
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
 
 :root{
     --textColor:#485550;
     --bgColor:#c0eb6a;
     --bgLightColor:#c0eb6a75;
     --borderColor: #968d8d;
+    --LightBorderColor: #968d8d52;
     --secendColor: #ff8100;
 }
 *{

@@ -5,11 +5,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import firebase from '../../firebase'
-import {useStateValue} from "../../Stateprovider"
+import { useStateValue } from "../../Stateprovider"
 import dataBrandAndBreed from '../Data'
 import 'firebase/auth';
-import 'firebase/analytics';
 import 'firebase/firestore';
+
+const geofire = require('geofire-common');
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -30,7 +31,7 @@ export default function BuffaloBullPost() {
     const [description, setDescription] = useState("")
     const [errorMsg, setErrorMsg] = useState(null)
     const animalAgearr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-        const [state, dispatch] = useStateValue()
+    const [state, dispatch] = useStateValue()
 
     // firebase 
     const auth = firebase.auth();
@@ -46,7 +47,7 @@ export default function BuffaloBullPost() {
             setFiles(Object.assign(allfiles, files))
         }
     };
-        const animalFromSubmit = () => { 
+    const animalFromSubmit = () => {
         if (breed.length === 0) {
             setErrorMsg("breed not selected")
         } else if (EcjectPrice === 0) {
@@ -56,15 +57,22 @@ export default function BuffaloBullPost() {
         } else if (description > 251) {
             setErrorMsg("Description is long")
         } else {
+            const lat = state.data.coord.lat
+            const lon = state.data.coord.lon
+            const hash = geofire.geohashForLocation([lat, lon]);
             setErrorMsg(null)
             dispatch({
-                type :"POST",
-                data:{Uid: user.uid,
-                animal: "BuffaloBull",
-                breed: breed,
-                price: EcjectPrice,
-                animalAge: animalAge,
-                description: description},
+                type: "POST",
+                data: {
+                    Uid: user.uid,
+                    animal: "BuffaloBull",
+                    Geohash: hash,
+                    geopoint: [lat, lon],
+                    breed: breed,
+                    price: EcjectPrice,
+                    animalAge: animalAge,
+                    description: description
+                },
                 files: files
             })
         }

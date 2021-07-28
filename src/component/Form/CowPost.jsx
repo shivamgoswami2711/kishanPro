@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -9,6 +9,9 @@ import dataBrandAndBreed from '../Data'
 import { useStateValue } from "../../Stateprovider"
 import 'firebase/auth';
 
+const geofire = require('geofire-common');
+
+
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -18,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
     },
 }));
+
 
 export default function CowForm1() {
     const classes = useStyles();
@@ -77,7 +81,9 @@ export default function CowForm1() {
         } else if (description > 251) {
             setErrorMsg("Description is long")
         } else {
-            console.log(files)
+            const lat = state.data.coord.lat
+            const lon = state.data.coord.lon
+            const hash = geofire.geohashForLocation([lat,lon]);
             setErrorMsg(null)
             dispatch({
                 type: "POST",
@@ -85,6 +91,8 @@ export default function CowForm1() {
                 {
                     Uid: user.uid,
                     animal: "Cow",
+                    Geohash: hash,
+                    geopoint: [lat,lon],
                     breed: breed,
                     byaath: byaath,
                     produceMilk: produceMilk,

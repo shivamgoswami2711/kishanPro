@@ -8,8 +8,8 @@ import firebase from '../../firebase'
 import dataBrandAndBreed from '../Data'
 import { useStateValue } from "../../Stateprovider"
 import 'firebase/auth';
-import 'firebase/analytics';
 import 'firebase/firestore';
+const geofire = require('geofire-common');
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -72,12 +72,17 @@ function DogPost() {
         } else if (description > 251) {
             setErrorMsg("Description is long")
         } else {
+            const lat = state.data.coord.lat
+            const lon = state.data.coord.lon
+            const hash = geofire.geohashForLocation([lat,lon]);
             setErrorMsg(null)
             dispatch({
                 type: "POST",
                 data: {
                     Uid: user.uid,
                     animal: "dog",
+                    Geohash: hash,
+                    geopoint: [lat,lon],
                     breed: breed,
                     price: EcjectPrice,
                     animalAge: animalAge,

@@ -11,8 +11,8 @@
     width: 300px;
     border-radius: 8px;
 }
-input[type="email"],
-input[type="text"]{
+.loginContainer input[type="email"],
+.loginContainer input[type="text"]{
     width: 17rem;
     height: 1.4rem;
 }

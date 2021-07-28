@@ -1,20 +1,25 @@
 /* ################################################ */
 /* nevigation menu */
 /* ############################################### */
-
+header{
+    z-index: 111;
+    position: fixed;
+    left: 0;
+    right: 0;
+}
 .mainheader{
     position: relative;
     padding: 2px 0;
     display: grid;
-    grid-template-columns: 300px 1fr 300px auto;
+    grid-template-columns: 47px 300px 1fr 300px auto;
     justify-items: center;
     background-color: var(--bgColor);
     z-index: 1;
 }
-/* .mainheader nav li{
-    display: inline;
-} */
 
+.backArrow {
+    margin-top: 8px;
+}
 .mainheader nav li{
     display: inline-block;
     padding: 9px 20px;
@@ -95,6 +100,7 @@ nav li span {
     position: fixed;
     width: 250px;
     height: 100vh;
+    margin-top: 40px;
     border-right: 1px solid var(--borderColor);
     z-index: 2;
 }

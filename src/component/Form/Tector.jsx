@@ -5,14 +5,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import dataBrandAndBreed from '../Data'
+import { useStateValue } from "../../Stateprovider"
 import firebase from '../../firebase'
 import 'firebase/auth';
-import 'firebase/analytics';
-import 'firebase/firestore';
-
+const geofire = require('geofire-common');
 // firebase 
 const auth = firebase.auth();
-const db = firebase.firestore();
 const user = auth.currentUser;
 let allfiles = []
 
@@ -34,7 +32,40 @@ function Tector() {
     const [tacterPower, setTacterPower] = useState('')
     const [tractorsBrand, setTractorsBrand] = useState('')
     const [description, setDescription] = useState('')
+    const [price, setPrice] = useState(0)
     const [errorMsg, setErrorMsg] = useState(null)
+    const [state, dispatch] = useStateValue()
+
+    const questionSubmit = () => {
+        if (tractorsBrand.length === 0) {
+            setErrorMsg("enter brand name")
+        } else if (tacterPower === 0) {
+            setErrorMsg("places enter horse power")
+        } else if (price === 0) {
+            setErrorMsg("price is enpty")
+        } else if (description > 251) {
+            setErrorMsg("Description is long")
+        } else {
+            const lat = state.data.coord.lat
+            const lon = state.data.coord.lon
+            const hash = geofire.geohashForLocation([lat,lon]);
+            setErrorMsg(null)
+            dispatch({
+                type: "POST",
+                data: {
+                    'Uid': user.uid,
+                    Geohash: hash,
+                    geopoint: [lat,lon],
+                    equipment:"tector",
+                    brand: tractorsBrand,
+                    price: price,
+                    description: description,
+                    url: url
+                },
+                files: files
+            })
+        }
+    }
 
     const removeImg = e => setFiles(files.filter((i, index) => index != e.target.id))
 
@@ -53,7 +84,8 @@ function Tector() {
             setLinkAdd(null)
         }
     }
-    const questionSubmit = () => { }
+
+
     return (
         <div>
             {errorMsg ? (<div className="msgContainer"> <label htmlFor="">{errorMsg}</label></div>) : ""}
@@ -61,7 +93,7 @@ function Tector() {
 
                 <div className="formLinkImg"><label htmlFor="formQuestionImg"><i className="fa fa-camera upload-button"></i></label><input className="file-upload" type="file" id="formQuestionImg" accept="image/*" multiple onChange={uploadImgFile} /><i className="fas fa-link" onClick={() => setLinkAdd("add")}></i></div>
                 <div className="linkImgContainer">
-                    {linkAdd ? (<div><input type="url" onClick={e => setUrl(e.target.value)} onKeyPress={enterUrl} className="inputUrl" placeholder="Enter URL and press Enter key" /></div>) : (<></>)}
+                    {linkAdd ? (<div><input type="url" onChange={e => setUrl(e.target.value)} onKeyPress={enterUrl} className="inputUrl" placeholder="Enter URL and press Enter key" /></div>) : (<></>)}
                     <div className="showLinkImg">
                         <div className="seedimgGallry">
                             <span className="cencel">X</span>
@@ -91,14 +123,14 @@ function Tector() {
                         <div className="row VegetablesContainer">
                             <div>
                                 <label htmlFor="">Price</label>
-                                <div><input type="number" onClick={e => setTacterPower(e.target.value)} className="inputUrl Price" placeholder="Ex. 100 ₹" /></div>
+                                <div><input type="number" onChange={e => setPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 250000 ₹" /></div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
                     <label htmlFor="">horse power</label><br />
-                    <input type="number" onClick={e => setTacterPower(e.target.value)} className="inputUrl" placeholder="Ex. 25 HP" />
+                    <input type="number" onChange={e => setTacterPower(e.target.value)} className="inputUrl" placeholder="Ex. 25 HP" />
                 </div>
                 <h4>Description</h4>
                 <textarea type="textarea" onChange={e => setDescription(e.target.value)} defaultValue="" rows="4" cols="50" name="question" id="question" ></textarea>

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useHistory, Link } from "react-router-dom";
+import { useStateValue } from "../Stateprovider"
 import fetchData from './Weather'
 import firebase from '../firebase'
 import 'firebase/auth';
@@ -10,13 +11,15 @@ import 'firebase/firestore';
 function Login() {
   const [code, setCode] = useState('');
   const [number, setNumber] = useState('');
+  const [confirmationResult, setConfirmationResult] = useState(null);
+  const [state, dispatch] = useStateValue()
   const [recaptcha, setRecaptcha] = useState(null);
   const element = useRef(null);
-  const [confirmationResult, setConfirmationResult] = useState(null);
+  let weatherData;
+  
   const auth = firebase.auth();
   const history = useHistory();
   const db = firebase.firestore();
-
 
   useEffect(() => {
     if (!recaptcha) {
@@ -33,10 +36,18 @@ function Login() {
       // User signed in successfully.
       const user = auth.currentUser;
       const docRefInfo = db.collection("user").doc(user.uid);
-      docRefInfo.get().then((doc) => {
+      docRefInfo.get().then( async (doc) => {
         if (doc.exists) {
-          fetchData(doc.data().pincode)
-          console.log(doc.data().pincode)
+          weatherData = await fetchData(doc.data().pincode)
+          dispatch({
+            type:"weather",
+            weather:weatherData
+          })
+          dispatch({
+            type:"useData",
+            data:{useData:doc.data()}
+          })
+
           // add data in local storage
           if (typeof (Storage) !== "undefined") {
             // Code for localStorage/sessionStorage.
@@ -54,6 +65,7 @@ function Login() {
         }
       }).catch((error) => {
         console.log("Error getting document:", error);
+        alert(error.code)
       });
     }).catch((error) => {
       alert(error.code)
@@ -64,20 +76,20 @@ function Login() {
 
   // sand OTP
   const signInWithPhoneNumber = async () => {
-    history.push("")
-    // if (number.length>=10 && 13>=number.length) {
-    //   // remove extra part in number
-    //   let tenNumber = number.substring(number.length-10, number.length);
-    //   const phoneNumber = `+91${tenNumber}`;
-    //   setConfirmationResult(await auth.signInWithPhoneNumber(phoneNumber, recaptcha)
-    //   .catch(error => {
-    //     alert(error.code);
-    //     console.log(error.message)
-    //   }));
-    // }
-    // else{
-    //   alert('places enter vaild Number (:')
-    // }
+    // history.push("")
+    if (number.length >= 10 && 13 >= number.length) {
+      // remove extra part in number
+      let tenNumber = number.substring(number.length - 10, number.length);
+      const phoneNumber = `+91${tenNumber}`;
+      setConfirmationResult(await auth.signInWithPhoneNumber(phoneNumber, recaptcha)
+        .catch(error => {
+          alert(error.code);
+          console.log(error.message)
+        }));
+    }
+    else {
+      alert('places enter vaild Number (:')
+    }
 
   };
 

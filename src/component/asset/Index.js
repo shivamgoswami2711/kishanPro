@@ -1,5 +1,6 @@
 
 const Images = {
+    profile: require('./profile.jpg').default,
     Market: require('./cart.png').default,
     Form: require('./form.png').default,
     information: require('./information.png').default,

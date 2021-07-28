@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -6,10 +6,11 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import firebase from '../../firebase'
 import dataBrandAndBreed from '../Data'
-import {useStateValue} from "../../Stateprovider"
+import { useStateValue } from "../../Stateprovider"
 import 'firebase/auth';
-import 'firebase/analytics';
 import 'firebase/firestore';
+
+const geofire = require('geofire-common');
 
 
 const useStyles = makeStyles((theme) => ({
@@ -40,6 +41,7 @@ export default function CowForm1() {
     const pregnancyMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     const numberOfCalves = ["no", "bull calf", "heifer calf/calf"]
     const [state, dispatch] = useStateValue()
+
 
     // firebase 
     const auth = firebase.auth();
@@ -79,20 +81,27 @@ export default function CowForm1() {
         } else if (description > 251) {
             setErrorMsg("Description is long")
         } else {
+            const lat = state.data.coord.lat
+            const lon = state.data.coord.lon
+            const hash = geofire.geohashForLocation([lat, lon]);
             setErrorMsg(null)
             dispatch({
-                type :"POST",
-                data:{Uid: user.uid,
-                animal: "Buffalo",
-                breed: breed,
-                byaath: byaath,
-                produceMilk: produceMilk,
-                milkCpacity: milkCpacity,
-                price: EcjectPrice,
-                animalAge: animalAge,
-                calf: calfNumber,
-                pregnancy: pregnancy,
-                description: description},
+                type: "POST",
+                data: {
+                    Uid: user.uid,
+                    Geohash: hash,
+                    geopoint: [lat, lon],
+                    animal: "Buffalo",
+                    breed: breed,
+                    byaath: byaath,
+                    produceMilk: produceMilk,
+                    milkCpacity: milkCpacity,
+                    price: EcjectPrice,
+                    animalAge: animalAge,
+                    calf: calfNumber,
+                    pregnancy: pregnancy,
+                    description: description
+                },
                 files: files
             })
         }
@@ -116,20 +125,20 @@ export default function CowForm1() {
                             <MenuItem value="Other"><em>Other</em></MenuItem>
                         </Select>
                     </FormControl><br />
-                            <label htmlFor="childrenBirth" className="cl">how many times did you have children?</label><br />
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-outlined-label">Number</InputLabel>
-                                <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={byaath}
-                                    onChange={event => setByaath(event.target.value)} label="childrenBirth">
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    {animalAgearr.map(Num => (<MenuItem value={Num}><em>{Num}</em></MenuItem>))}
-                                </Select>
-                            </FormControl><br />
+                    <label htmlFor="childrenBirth" className="cl">how many times did you have children?</label><br />
+                    <FormControl variant="outlined" className={classes.formControl}>
+                        <InputLabel id="demo-simple-select-outlined-label">Number</InputLabel>
+                        <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={byaath}
+                            onChange={event => setByaath(event.target.value)} label="childrenBirth">
+                            <MenuItem value=""><em>None</em></MenuItem>
+                            {animalAgearr.map(Num => (<MenuItem value={Num}><em>{Num}</em></MenuItem>))}
+                        </Select>
+                    </FormControl><br />
 
-                            <label htmlFor="">how much milk does it give</label>
-                            <div><input type="number" onChange={e => setProduceMilk(e.target.value)} className="inputUrl milk" placeholder="produce milk" /></div>
-                            <label htmlFor="">milk capacity</label>
-                            <div><input type="number" onChange={e => setMilkCpacity(e.target.value)} className="inputUrl milkCapacity" placeholder="milk capacity" /></div>
+                    <label htmlFor="">how much milk does it give</label>
+                    <div><input type="number" onChange={e => setProduceMilk(e.target.value)} className="inputUrl milk" placeholder="produce milk" /></div>
+                    <label htmlFor="">milk capacity</label>
+                    <div><input type="number" onChange={e => setMilkCpacity(e.target.value)} className="inputUrl milkCapacity" placeholder="milk capacity" /></div>
                 </div>
 
                 <div className="cowBullPostWrite">
@@ -148,25 +157,25 @@ export default function CowForm1() {
                         </div>
                     </div>
                     <div className="animalPricecontainer">
-                            <div>
-                                <label htmlFor="">Price</label>
-                                <div><input type="number" onChange={e => setEcjectPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 10000 ₹" /></div>
-                            </div>
-                            <div>
-                                <label className="topLabel" htmlFor="">calfs</label><br />
-                                <FormControl variant="outlined" className={classes.formControl}>
-                                    <InputLabel id="demo-simple-select-outlined-label">calf</InputLabel>
-                                    <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={calfNumber}
-                                        onChange={event => setCalfNumber(event.target.value)} label="calf">
-                                        <MenuItem value=""><em>None</em></MenuItem>
-                                        {numberOfCalves.map(calf => (<MenuItem value={calf}><em>{calf}</em></MenuItem>))}
-                                    </Select>
-                                </FormControl><br />
-                            </div>
+                        <div>
+                            <label htmlFor="">Price</label>
+                            <div><input type="number" onChange={e => setEcjectPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 10000 ₹" /></div>
+                        </div>
+                        <div>
+                            <label className="topLabel" htmlFor="">calfs</label><br />
+                            <FormControl variant="outlined" className={classes.formControl}>
+                                <InputLabel id="demo-simple-select-outlined-label">calf</InputLabel>
+                                <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={calfNumber}
+                                    onChange={event => setCalfNumber(event.target.value)} label="calf">
+                                    <MenuItem value=""><em>None</em></MenuItem>
+                                    {numberOfCalves.map(calf => (<MenuItem value={calf}><em>{calf}</em></MenuItem>))}
+                                </Select>
+                            </FormControl><br />
+                        </div>
                     </div>
 
 
-                   <div className="animalfromLeftSelectionContainer">
+                    <div className="animalfromLeftSelectionContainer">
                         <div>
                             <label className="topLabel" htmlFor="">Aminal Age</label><br />
                             <FormControl variant="outlined" className={classes.formControl}>

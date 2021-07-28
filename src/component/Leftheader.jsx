@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import CowPost from './Form/CowPost';
 import CowBullPost from './Form/CowBullPost';
 import FormQuestion from './Form/FormQuestion';
@@ -12,31 +12,29 @@ import GoatPost from "./Form/GoatPost"
 import GoatBullPost from "./Form/GoatBullPost"
 import DogPost from "./Form/DogPost"
 import HenBullPost from "./Form/HenBullPost"
-import Images from './asset/Index';
+import OtherPostType from './Form/OtherPostType';
+import SeedForm from './Form/SeedForm'
+import Images from './asset/Index'
+import { useStateValue } from "../Stateprovider"
 import firebase from '../firebase'
 import 'firebase/auth';
-import 'firebase/analytics';
-import 'firebase/firestore';
-
 
 function Leftheader() {
     const [windowName, setWindowName] = useState([]);
-    const [windowOpenCloce, setWindowOpenCloce] = useState(false)
-    let data;
 
-    useEffect(() => {
+    const [state, dispatch] = useStateValue()
+    const [windowOpenCloce, setWindowOpenCloce] = useState(state.Status)
 
-        return () => {
-            data = ''
-        }
-    }, [data])
     // firebase 
     const auth = firebase.auth();
     const db = firebase.firestore();
     const user = auth.currentUser;
 
-
     const popupSection = () => {
+        console.log(state)
+        if(!state.Status){
+            setWindowOpenCloce(false)
+        }
         switch (windowName[windowName.length - 1]) {
             case 'CreatePost':
                 return <CreatePost />
@@ -46,6 +44,8 @@ function Leftheader() {
                 return <AnimalType />;
             case 'formQuestion':
                 return <FormQuestion />;
+            case 'SeedForm':
+                return <SeedForm/>;
             case 'tectorPost':
                 return <Tector />;
             case 'equipment':
@@ -54,8 +54,10 @@ function Leftheader() {
                 return <Vegetables />;
             case 'Pesticide':
                 return <Pesticide />;
-            // case 'otherPostType':
-            //     return formQuestion("other");
+            case 'other':
+                return <OtherPostType type='product'/>;
+            case 'otherPostType':
+                return <OtherPostType type='animal' />;
             case 'cowPost':
                 return <CowPost />;
             case 'cowBullPost':
@@ -121,7 +123,7 @@ function Leftheader() {
                         <h4>dog</h4>
                     </div>
                 </div>
-                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "cowBullPost"])}>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "otherPostType"])}>
                     <div><img src={Images.LightBulb} alt="" />
                         <h4>Other</h4>
                     </div>
@@ -159,7 +161,7 @@ function Leftheader() {
                         <h4>Pesticide<br />Fertilizer</h4>
                     </div>
                 </div>
-                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "otherPostType"])}>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "other"])}>
                     <div><img src={Images.LightBulb} alt="" />
                         <h4>other</h4>
                     </div>
@@ -188,7 +190,7 @@ function Leftheader() {
                         <h4>information</h4>
                     </div>
                 </div>
-                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "newPricePost"])}>
+                <div className="postTypeContainer" onClick={() => setWindowName([...windowName, "SeedForm"])}>
                     <div><img src={Images.SeedIcon} alt="" />
                         <h4>seed Sell</h4>
                     </div>
@@ -202,18 +204,27 @@ function Leftheader() {
 
         )
     }
-
+    function newOpenWindow(){
+        dispatch({type: "StatusOpen"})
+        setWindowOpenCloce(true); setWindowName(['CreatePost']);
+    }
+    function newCloseWindow(){ 
+        setWindowName(windowName.slice(0, windowName.length - 1)); 
+        if(windowName.length === 1 ) {
+            setWindowOpenCloce(false);
+            dispatch({type: "StatusClose"})
+        }}
     return (
         <>
             <section>
                 <div className="leftheaderButton">
                     <div className="button filterbtn">Filter</div>
-                    <div className="button newPrice" onClick={() => setWindowName(['CreatePost'])}>New price</div>
+                    <div className="button newPrice" onClick={() => newOpenWindow()}>New price</div>
                 </div>
                 <div className="leftheader">
                     <span className="cencelLeftHeader" onClick={() => setWindowName(windowName.slice(0, windowName.length - 1))}>X</span>
                     <div>
-                        <div className="button newPrice" onClick={() => { setWindowOpenCloce(true); setWindowName(['CreatePost']) }}>new price</div>
+                        <div className="button newPrice" onClick={() => newOpenWindow()}>new price</div>
                     </div>
                     <div>
                         <div className='laftHeaderTab'><div><img src={Images.Market} alt="" /></div><div><h1>Market</h1></div></div>
@@ -227,7 +238,7 @@ function Leftheader() {
             <section className="popupSection">
                 {windowOpenCloce ? (<div className="popup">
                     <div className="window">
-                        <span className="cencel" onClick={() => { setWindowName(windowName.slice(0, windowName.length - 1)); windowName.length === 1 ? setWindowOpenCloce(false) : setWindowOpenCloce(true) }}>X</span>
+                        <span className="cencel" onClick={() => newCloseWindow()}>X</span>
                         {popupSection()}
                     </div>
                 </div>) : (<></>)}

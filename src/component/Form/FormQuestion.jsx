@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import firebase from '../../firebase'
+import { useStateValue } from "../../Stateprovider"
 import 'firebase/auth';
-import 'firebase/analytics';
 import 'firebase/firestore';
+const geofire = require('geofire-common');
 
 // firebase 
 const auth = firebase.auth();
-const db = firebase.firestore();
 const user = auth.currentUser;
 let allfiles = []
 
@@ -18,6 +18,7 @@ function FormQuestion() {
     const [url, setUrl] = useState("")
     const [question, setQuestion] = useState('')
     const [errorMsg, setErrorMsg] = useState(null)
+    const [state, dispatch] = useStateValue()
 
     const removeImg = e => setFiles(files.filter((i, index) => index != e.target.id))
 
@@ -36,7 +37,29 @@ function FormQuestion() {
             setLinkAdd(null)
         }
     }
-    const questionSubmit = () => { }
+    const questionSubmit = () => {
+        if (question > 251) {
+            setErrorMsg("Description is long")
+        } else {
+            const lat = state.data.coord.lat
+            const lon = state.data.coord.lon
+            const hash = geofire.geohashForLocation([lat,lon]);
+            setErrorMsg(null)
+            dispatch({
+                type: "POST",
+                data: {
+                    Uid: user.uid,
+                    Geohash: hash,
+                    geopoint: [lat,lon],
+                    Product: "other",
+                    url:url,
+                    description: question
+                },
+                files: files
+            })
+        }
+     }
+    
 
     return (
         <>

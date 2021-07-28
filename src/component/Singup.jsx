@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useHistory, Link } from "react-router-dom";
+import GoogleAutoLocation from "./GoogleAutoComplete"
 import fetchData from './Weather'
 import firebase from '../firebase'
 import 'firebase/auth';
 import 'firebase/firestore';
+import GoogleAutoComplete from './GoogleAutoComplete';
 
 
 
@@ -34,6 +36,8 @@ function Singup() {
   });
 
 
+
+
   function handleSubmit() {
   }
   const singupSubmit = async () => {
@@ -46,7 +50,6 @@ function Singup() {
       console.log(error.message);
     });
   }
-
 
 
   const submitDetaile = async () => {
@@ -77,25 +80,25 @@ function Singup() {
     }
 
   };
-
   return (
     <section className="singupSection">
       <div className="singupContainer">
-        {otpVerify ? (<>
-          <div className="address">
-            <label htmlFor="address">address</label><br />
-            <input type="text" name="address" id="address" placeholder='address' onChange={e => setAddress(e.target.value)} />
-          </div>
+        {otpVerify ? (
+          <>
+            <div className="address">
+              <label htmlFor="address">address</label><br />
+              <input type="text" name="address" id="address" placeholder='address' onChange={e => setAddress(e.target.value)} />
+            </div>
 
-          <div className="pincode">
-            <label htmlFor="pincode">pincode</label><br />
-            <input type="text" name="pincode" id="pincode" placeholder='pincode' onChange={e => setPincode(e.target.value)} />
-          </div>
+            <div className="pincode">
+              <label htmlFor="pincode">pincode</label><br />
+              <input type="text" name="pincode" id="pincode" placeholder='pincode' onChange={e => setPincode(e.target.value)} />
+            </div>
 
-          <div className="singupSubmit">
-            <div className="button" type="submit" onClick={submitDetaile}>Submit</div>
-          </div>
-        </>
+            <div className="singupSubmit">
+              <div className="button" type="submit" onClick={submitDetaile}>Submit</div>
+            </div>
+          </>
         ) : (<>
           <h1 className>Login/singup</h1>
           <form onSubmit={handleSubmit}>

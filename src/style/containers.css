@@ -70,6 +70,9 @@
 .seedPriceConatainer{
     display: flex;
 }
+.seedPriceConatainer>div{
+    margin: 0 15px;
+}
 
 .seedimgGallry{
     display: flex;
@@ -108,7 +111,7 @@ input[type=number]::-webkit-outer-spin-button {
     width: 70%;
     position: relative;
     right: -25%;
-    top: 25px;
+    top: 55px;
 }
 
 .imgGallry {

@@ -6,10 +6,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import firebase from '../../firebase'
 import dataBrandAndBreed from '../Data'
-import {useStateValue} from "../../Stateprovider"
+import { useStateValue } from "../../Stateprovider"
 import 'firebase/auth';
-import 'firebase/analytics';
 import 'firebase/firestore';
+const geofire = require('geofire-common');
 
 
 const useStyles = makeStyles((theme) => ({
@@ -56,19 +56,26 @@ export default function GoatPost() {
             setErrorMsg("breed not selected")
         } else if (EcjectPrice === 0) {
             setErrorMsg("price is enpty")
-        } else if (henWeight.length===0) {
+        } else if (henWeight.length === 0) {
             setErrorMsg("weight is empty")
         } else if (description > 251) {
             setErrorMsg("Description is long")
         } else {
+            const lat = state.data.coord.lat
+            const lon = state.data.coord.lon
+            const hash = geofire.geohashForLocation([lat, lon]);
             setErrorMsg(null)
             dispatch({
-                type :"POST",
-                data:{Uid: user.uid,
-                animal: "hen",
-                breed: breed,
-                price: EcjectPrice,
-                description: description},
+                type: "POST",
+                data: {
+                    Uid: user.uid,
+                    Geohash: hash,
+                    geopoint: [lat, lon],
+                    animal: "hen",
+                    breed: breed,
+                    price: EcjectPrice,
+                    description: description
+                },
                 files: files
             })
         }

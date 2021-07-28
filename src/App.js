@@ -1,15 +1,20 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Header from './component/Header';
-import Leftheader from './component/Leftheader';
-import SeedPostContainer from './component/SeedPostContainer';
+import Home from './component/Home'
+import Header from './component/Header'
 import Chat from './component/Chat';
 import Login from './component/Login';
 import Singup from './component/Singup';
+import FullPost from './component/Post/FullPost'
 function App() {
   return (
     <div className="App">
       <Router>
         <Switch>
+
+         {/* Post */}
+          <Route path='/post'>
+            <FullPost/>
+          </Route>
 
          {/* singup */}
           <Route path='/singup'>
@@ -29,8 +34,7 @@ function App() {
 
           {/* home */}
           <Route path='/'>
-              <Header/>
-              <Leftheader/><SeedPostContainer/>
+            <Home/>
               {/* <GoogleAutoComplete/> */}
           </Route>
 

@@ -3,11 +3,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import { useStateValue } from "../../Stateprovider"
 import Select from '@material-ui/core/Select';
 import firebase from '../../firebase'
 import 'firebase/auth';
-import 'firebase/analytics';
 import 'firebase/firestore';
+const geofire = require('geofire-common');
 
 // firebase 
 const auth = firebase.auth();
@@ -36,6 +37,7 @@ function Vegetables() {
     const [weightUnit, setWeightUnit] = useState('')
     const [errorMsg, setErrorMsg] = useState(null)
     const Unit = ["gram", "kilogram", "quintal", "tonne", "ceret"]
+    const [state, dispatch] = useStateValue()
 
     const removeImg = e => setFiles(files.filter((i, index) => index != e.target.id))
 
@@ -54,7 +56,32 @@ function Vegetables() {
             setLinkAdd(null)
         }
     }
-    const questionSubmit = () => { }
+    const questionSubmit = () => { 
+        if (EcjectPrice === 0) {
+            setErrorMsg("price is enpty")
+        } else if (description > 251) {
+            setErrorMsg("Description is long")
+        } else {
+            const lat = state.data.coord.lat
+            const lon = state.data.coord.lon
+            const hash = geofire.geohashForLocation([lat,lon]);
+            setErrorMsg(null)
+            dispatch({
+                type: "POST",
+                data: {
+                    Uid: user.uid,
+                    Geohash: hash,
+                    geopoint: [lat,lon],
+                    Product: "vegetable",
+                    url:url,
+                    productName:productName,
+                    price: EcjectPrice,
+                    description: description
+                },
+                files: files
+            })
+        }
+    }
 
 
     return (
@@ -81,12 +108,12 @@ function Vegetables() {
                 <div className="row">
                     <div>
                         <label htmlFor="">Vegetables name</label>
-                        <div><input type="number" onClick={e => setProductName(e.target.value)} className="inputUrl " placeholder="Product Name" /></div>
+                        <div><input type="text" onChange={e => setProductName(e.target.value)} className="inputUrl " placeholder="Product Name" /></div>
                     </div>
                     <div className="row VegetablesContainer">
                         <div>
                             <label htmlFor="">Price</label>
-                            <div><input type="number" onClick={e => setEcjectPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 100 ₹" /></div>
+                            <div><input type="number" onChange={e => setEcjectPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 100 ₹" /></div>
                         </div>
                         <div className="unit">
                             <label htmlFor="" className="topLabel">unit</label><br />

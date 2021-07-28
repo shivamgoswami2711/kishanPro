@@ -18,10 +18,10 @@ function makeid() {
     return result + new Date().getTime().toString();
 }
 // Upload file and metadata to the object 'images/mountains.jpg'
-const putStorageItem = (file) => {
+const putStorageItem = async (file) => {
     const metadata = { contentType: 'image/jpeg' };
     const uploadTask = storageRef.child('Post/' + makeid()).put(file, metadata)
-    uploadTask.on(
+    await uploadTask.on(
         firebase.storage.TaskEvent.STATE_CHANGED,
         (snapshot) => {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -36,13 +36,11 @@ const putStorageItem = (file) => {
                 default:
                     break;
             }
-        }, error => { // A full list of error codes is available at
+        }, error => {
+            // A full list of error codes is available at
             alert(error.code)
             console.log(error.message);
-        },
-        // Upload completed successfully, now we can get the download URL
-        // () => uploadTask.snapshot.ref.getDownloadURL().then((URL) => !fileUrl.includes(URL) ? fileUrl.push(URL) : fileUrl))
-        async () => {
+        }, async () => {
             const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
             fileUrl.push(downloadURL)
         }
@@ -52,34 +50,56 @@ const putStorageItem = (file) => {
 
 //  initial value 
 export const initalState = {
-    usedata: []
+    usedata: [],
+    Post: { img: [] },
+    Comment: [],
+    Status: false
 }
 
 
 const reducer = (state, action) => {
+    console.log("hello i am reducer")
     switch (action.type) {
-        case 'POST': Promise.all(action.files.map(async (file) => {
-            await putStorageItem(file)
-        }))
-            .then(async () => {
-                await db.collection("Post").doc(makeid()).set({ ...action.data, img: fileUrl }).then(() => {
-                    console.log("Document successfully written!");
-                    alert('successfully');
-                    fileUrl = []
+        case 'useData':
+            const useData = action.data
+            console.log(useData)
+            return {...state, ...useData}
+        case 'POST':
+            let Status;
+            Promise.all(action.files.map(async (file) => {
+
+                await putStorageItem(file)
+            }))
+                .then(async () => {
+                    const ref = db.collection("Post").doc(makeid())
+                    await ref.set({ ...action.data, img: fileUrl,likes:[]}).then(() => {
+                        Status = false
+                        console.log("Document successfully written!");
+                        window.localStorage.windowStatus = 'Close'
+                        alert('successfully');
+                        fileUrl = []
+                    }).catch((error) => {
+                        Status = true
+                        alert(error.code)
+                        console.log(error.message);
+                    });
                 }).catch((error) => {
-                    alert(error.code)
+                    Status = true
+                    alert(error.code);
                     console.log(error.message);
-                });
-            }).catch((error) => {
-                alert(error.code);
-                console.log(error.message);
-            })
-            return
-        // case 'ADD_TO_CART':
-        //     return {
-        //         ...state,
-        //         user: [...state.data, ...action.id],
-        //     };
+                })
+            return { ...state, Status: Status }
+        case "StatusOpen":
+            return { ...state, Status: true }
+        case "StatusClose":
+            return { ...state, Status: false }
+        case "weather":
+            const data = action.weather
+            return { ...state, data }
+        case "comment":
+            const Post = action.post
+            const Comment = action.comment
+            return { ...state, Comment, Post }
         default:
             return { ...state.data, ...action.id }
     }
