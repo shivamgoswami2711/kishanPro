@@ -44,15 +44,18 @@ function Equipment() {
             setErrorMsg("price is enpty")
         } else if (description > 251) {
             setErrorMsg("Description is long")
+        }else if (files.length >= 4) {
+            setErrorMsg("only max 4 pic upload")
         } else {
-            const lat = state.data.coord.lat
-            const lon = state.data.coord.lon
+            const lat = state.data.city.coord.lat
+            const lon = state.data.city.coord.lon
             const hash = geofire.geohashForLocation([lat,lon]);
             setErrorMsg(null)
             dispatch({
                 type: "POST",
                 data: {
-                    Uid: user.uid,
+                    uid: user.uid,
+                    type:"equipment",
                     Geohash: hash,
                     geopoint: [lat,lon],
                     equipment: productName,

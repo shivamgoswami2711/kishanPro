@@ -8,7 +8,7 @@ import firebase from '../../firebase'
 import dataBrandAndBreed from '../Data'
 import { useStateValue } from "../../Stateprovider"
 import 'firebase/auth';
-import 'firebase/firestore';
+
 const geofire = require('geofire-common');
 
 
@@ -21,22 +21,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-export default function GoatPost() {
+function CowBullPost() {
     const classes = useStyles();
     const [files, setFiles] = useState([]);
     const [EcjectPrice, setEcjectPrice] = useState(0);
     const [ClickImg, setClickImg] = useState('');
     const [breed, setBreed] = useState('')
     const [animalAge, setAnimalAge] = useState(0)
-    const [calfNumber, setCalfNumber] = useState('')
-    const [pregnancy, setPregnancy] = useState(0)
-    const [byaath, setByaath] = useState('')
     const [description, setDescription] = useState("")
     const [errorMsg, setErrorMsg] = useState(null)
     const animalAgearr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
-    const pregnancyMonth = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    const numberOfCalves = ["no", "bull calf", "heifer calf/calf"]
     const [state, dispatch] = useStateValue()
 
 
@@ -45,8 +39,6 @@ export default function GoatPost() {
     const db = firebase.firestore();
     const user = auth.currentUser;
     let allfiles = []
-
-    const removeImg = e => setFiles(files.filter((i, index) => index != e.target.id))
 
     function uploadImgFile(e) {
         // second time uplode
@@ -60,42 +52,38 @@ export default function GoatPost() {
     const animalFromSubmit = () => {
         if (breed.length === 0) {
             setErrorMsg("breed not selected")
-        } else if (byaath === 0) {
-            setErrorMsg("how many times did you have children? value not selected")
         } else if (EcjectPrice === 0) {
             setErrorMsg("price is enpty")
         } else if (animalAge === 0) {
-            setErrorMsg("Select animal age")
-        } else if (calfNumber === 0) {
-            setErrorMsg("select calf detile")
-        } else if (pregnancy === 0) {
-            setErrorMsg("select pregnancy detile")
+            setErrorMsg("Aminal Age is enpty")
         } else if (description > 251) {
             setErrorMsg("Description is long")
+        }else if (files.length >= 4) {
+            setErrorMsg("only max 4 pic upload")
         } else {
-            const lat = state.data.coord.lat
-            const lon = state.data.coord.lon
-            const hash = geofire.geohashForLocation([lat, lon]);
+            const lat = state.data.city.coord.lat
+            const lon = state.data.city.coord.lon
+            const hash = geofire.geohashForLocation([lat,lon]);
             setErrorMsg(null)
-            dispatch({
+            dispatch({  
                 type: "POST",
                 data: {
-                    Uid: user.uid,
+                    uid: user.uid,
+                    animal: "OX",
+                    type:"animal",
                     Geohash: hash,
-                    geopoint: [lat, lon],
-                    animal: "Goat",
+                    geopoint: [lat,lon],
                     breed: breed,
-                    byaath: byaath,
                     price: EcjectPrice,
                     animalAge: animalAge,
-                    calf: calfNumber,
-                    pregnancy: pregnancy,
                     description: description
                 },
                 files: files
             })
         }
     }
+
+    const removeImg = e => setFiles(files.filter((i, index) => index != e.target.id))
 
     return (
         <form action="">
@@ -111,21 +99,23 @@ export default function GoatPost() {
                         <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={breed}
                             onChange={event => setBreed(event.target.value)} label="Age">
                             <MenuItem value=""><em>None</em></MenuItem>
-                            {dataBrandAndBreed[2].map(breed => (<MenuItem value={breed}><em>{breed}</em></MenuItem>))}
+                            {dataBrandAndBreed[0].map(breed => (<MenuItem value={breed}><em>{breed}</em></MenuItem>))}
                             <MenuItem value="Other"><em>Other</em></MenuItem>
                         </Select>
                     </FormControl><br />
-                    <label htmlFor="childrenBirth" className="cl">how many times did you have children?</label><br />
-                    <FormControl variant="outlined" className={classes.formControl}>
-                        <InputLabel id="demo-simple-select-outlined-label">Number</InputLabel>
-                        <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={byaath}
-                            onChange={event => setByaath(event.target.value)} label="childrenBirth">
-                            <MenuItem value=""><em>None</em></MenuItem>
-                            {animalAgearr.map(Num => (<MenuItem value={Num}><em>{Num}</em></MenuItem>))}
-                        </Select>
-                    </FormControl><br />
-                </div>
 
+                    <div>
+                        <label className="topLabel" htmlFor="">Aminal Age</label><br />
+                        <FormControl variant="outlined" className={classes.formControl}>
+                            <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
+                            <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={animalAge}
+                                onChange={event => setAnimalAge(event.target.value)} label="Age">
+                                <MenuItem value=""><em>None</em></MenuItem>
+                                {animalAgearr.map(age => (<MenuItem value={age}><em>{age + " year"}</em></MenuItem>))}
+                            </Select>
+                        </FormControl><br />
+                    </div>
+                </div>
                 <div className="cowBullPostWrite">
                     <div className="linkImgContainer">
                         <div className="showLinkImg">
@@ -141,48 +131,10 @@ export default function GoatPost() {
                                 </div> : ""}
                         </div>
                     </div>
-                    <div className="animalPricecontainer">
+                    <div className="animalfromLeftSelectionContainer">
                         <div>
                             <label htmlFor="">Price</label>
                             <div><input type="number" onChange={e => setEcjectPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 10000 ₹" /></div>
-                        </div>
-                        <div>
-                            <label className="topLabel" htmlFor="">calfs</label><br />
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-outlined-label">calf</InputLabel>
-                                <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={calfNumber}
-                                    onChange={event => setCalfNumber(event.target.value)} label="calf">
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    {numberOfCalves.map(calf => (<MenuItem value={calf}><em>{calf}</em></MenuItem>))}
-                                </Select>
-                            </FormControl><br />
-                        </div>
-                    </div>
-
-
-                    <div className="animalfromLeftSelectionContainer">
-                        <div>
-                            <label className="topLabel" htmlFor="">Aminal Age</label><br />
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
-                                <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={animalAge}
-                                    onChange={event => setAnimalAge(event.target.value)} label="Age">
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    {animalAgearr.map(age => (<MenuItem value={age}><em>{age + " year"}</em></MenuItem>))}
-                                </Select>
-                            </FormControl><br />
-                        </div>
-                        <div>
-                            <label className="topLabel" htmlFor="">pregnancy Month</label><br />
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-outlined-label">month</InputLabel>
-                                <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={pregnancy}
-                                    onChange={event => setPregnancy(event.target.value)} label="pregnancyMonth">
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    <MenuItem value="no"><em>No</em></MenuItem>
-                                    {pregnancyMonth.map(age => (<MenuItem value={age}><em>{age + " Month"}</em></MenuItem>))}
-                                </Select>
-                            </FormControl><br />
                         </div>
                     </div>
                     <h4>Description</h4>
@@ -191,8 +143,7 @@ export default function GoatPost() {
             </div>
             <div className="button formSubmit" onClick={animalFromSubmit}>Submit</div>
         </form>
-
-
     )
 }
 
+export default CowBullPost

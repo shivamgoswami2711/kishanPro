@@ -147,14 +147,17 @@ img:hover + .cencelImg{
 
 /* weather */
 .weatherContainer {
-    display: flex;
+    display: grid;
+    grid-template-columns: 170px repeat(auto-fill, 105px);
+    gap: 10px;
     align-items: center;
     justify-items: flex-end;
     justify-content: flex-end;
     border: 1px solid var(--borderColor);
     margin-bottom: 10px;
     border-radius: 5px;
-    height: 65px;
+    min-height: 65px;
+    max-height: 150px;
     background-color: #bfc5cc8c;
 }
 .weatherContainer div{
@@ -180,6 +183,15 @@ img.weatherImgStatus {
     flex-direction: column;
 }
 
+.carrentTime h1, .carrentTime h4 {
+    line-height: 18px;
+}
+.weatherForcastContaine{
+    margin: 20px;
+}
+.weatherForcastContainer>.location>h1, .weatherForcastContainer>.location>h4 {
+    line-height: 0;
+}
 .weatherContainer h1, .weatherContainer h3, .weatherContainer h4 {
     line-height: 0;
     text-transform: capitalize;
@@ -197,7 +209,8 @@ img.weatherImgStatus {
     border-radius: 3px;
     display: grid;
     grid-template-columns: repeat(4, 180px);
-    grid-column-gap: 5px;
+    gap: 7px;
+    margin: 7px;
 }
 .window .temperature,.window .windStatus,.window .carrentTime {
     display: flex;
@@ -220,8 +233,9 @@ img.weatherImgStatus {
 
 /* formQuestion */
 
-.formQuestion,.cowBullPostContainer{
-    margin: 15px;
+.formQuestion, .cowBullPostContainer {
+    margin-bottom: 16px;
+    margin-top: 8px;
 }
 .cowBullPostContainer {
     width: 600px;

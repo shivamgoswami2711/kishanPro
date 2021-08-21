@@ -59,7 +59,6 @@ function Login() {
           }
           // go to home page 
           history.push("/")
-          alert('login')
         } else {
           console.log("No such document!");
         }

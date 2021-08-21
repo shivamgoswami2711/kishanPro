@@ -1,22 +1,23 @@
 import React, { useState } from 'react'
-import CowPost from './Form/CowPost';
-import CowBullPost from './Form/CowBullPost';
-import FormQuestion from './Form/FormQuestion';
-import Tector from './Form/Tector';
-import Equipment from './Form/Equipment';
-import Vegetables from './Form/Vegetables';
-import Pesticide from "./Form/Pesticide"
-import BuffaloPost from './Form/BuffaloPost';
-import BuffaloBullPost from './Form/BuffaloBullPost';
-import GoatPost from "./Form/GoatPost"
-import GoatBullPost from "./Form/GoatBullPost"
-import DogPost from "./Form/DogPost"
-import HenBullPost from "./Form/HenBullPost"
-import OtherPostType from './Form/OtherPostType';
-import SeedForm from './Form/SeedForm'
+import CowPost from './fromComponent/CowPost';
+import CowBullPost from './fromComponent/CowBullPost';
+import FormQuestion from './fromComponent/FormQuestion';
+import Tector from './fromComponent/Tector';
+import Equipment from './fromComponent/Equipment';
+import Vegetables from './fromComponent/Vegetables';
+import Pesticide from "./fromComponent/Pesticide"
+import BuffaloPost from './fromComponent/BuffaloPost';
+import BuffaloBullPost from './fromComponent/BuffaloBullPost';
+import GoatPost from "./fromComponent/GoatPost"
+import GoatBullPost from "./fromComponent/GoatBullPost"
+import DogPost from "./fromComponent/DogPost"
+import HenBullPost from "./fromComponent/HenBullPost"
+import OtherPostType from './fromComponent/OtherPostType';
+import SeedForm from './fromComponent/SeedForm'
 import Images from './asset/Index'
 import { useStateValue } from "../Stateprovider"
 import firebase from '../firebase'
+import { Link } from "react-router-dom";
 import 'firebase/auth';
 
 function Leftheader() {
@@ -31,7 +32,6 @@ function Leftheader() {
     const user = auth.currentUser;
 
     const popupSection = () => {
-        console.log(state)
         if(!state.Status){
             setWindowOpenCloce(false)
         }
@@ -227,11 +227,11 @@ function Leftheader() {
                         <div className="button newPrice" onClick={() => newOpenWindow()}>new price</div>
                     </div>
                     <div>
-                        <div className='laftHeaderTab'><div><img src={Images.Market} alt="" /></div><div><h1>Market</h1></div></div>
-                        <div className='laftHeaderTab'><div><img src={Images.Form} alt="" /></div><div><h1>form</h1></div></div>
-                        <div className='laftHeaderTab'><div><img src={Images.information} alt="" /></div><div><h1>Knowledge</h1></div></div>
-                        <div className='laftHeaderTab'><div><img src={Images.hashtag} alt="" /></div><div><h1>Follew</h1></div></div>
-                        <div className='laftHeaderTab'><div><img src={Images.Warehouse} alt="" /></div><div><h1>Warehouse</h1></div></div>
+                        <Link to='/' ><div className='laftHeaderTab'><div><img src={Images.Market} alt="" /></div><div><h1>Market</h1></div></div></Link>
+                        <Link to='/form' ><div className='laftHeaderTab'><div><img src={Images.Form} alt="" /></div><div><h1>form</h1></div></div></Link>
+                        <Link to='/' ><div className='laftHeaderTab'><div><img src={Images.information} alt="" /></div><div><h1>Knowledge</h1></div></div></Link>
+                        <Link to='/' ><div className='laftHeaderTab'><div><img src={Images.hashtag} alt="" /></div><div><h1>Follew</h1></div></div></Link>
+                        <Link to='/' ><div className='laftHeaderTab'><div><img src={Images.Warehouse} alt="" /></div><div><h1>Warehouse</h1></div></div></Link>
                     </div>
                 </div>
             </section>

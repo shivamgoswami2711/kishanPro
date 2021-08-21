@@ -1,32 +1,15 @@
 import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import { useStateValue } from "../../Stateprovider"
-import Select from '@material-ui/core/Select';
 import firebase from '../../firebase'
 import 'firebase/auth';
-import 'firebase/firestore';
+import { useStateValue } from "../../Stateprovider"
 const geofire = require('geofire-common');
 
 // firebase 
 const auth = firebase.auth();
-const db = firebase.firestore();
 const user = auth.currentUser;
 let allfiles = []
 
-const useStyles = makeStyles((theme) => ({
-    formControl: {
-        minWidth: 120,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}));
-
 function Vegetables() {
-    const classes = useStyles();
     const [files, setFiles] = useState([]);
     const [linkAdd, setLinkAdd] = useState(null)
     const [ClickImg, setClickImg] = useState('');
@@ -34,9 +17,7 @@ function Vegetables() {
     const [description, setDescription] = useState('')
     const [productName, setProductName] = useState('')
     const [EcjectPrice, setEcjectPrice] = useState(0);
-    const [weightUnit, setWeightUnit] = useState('')
     const [errorMsg, setErrorMsg] = useState(null)
-    const Unit = ["gram", "kilogram", "quintal", "tonne", "ceret"]
     const [state, dispatch] = useStateValue()
 
     const removeImg = e => setFiles(files.filter((i, index) => index != e.target.id))
@@ -56,27 +37,31 @@ function Vegetables() {
             setLinkAdd(null)
         }
     }
-    const questionSubmit = () => { 
-        if (EcjectPrice === 0) {
+    const questionSubmit = () => {
+        if (productName.length === 0) {
+            setErrorMsg("enter product Name")
+        } else if (EcjectPrice === 0) {
             setErrorMsg("price is enpty")
         } else if (description > 251) {
             setErrorMsg("Description is long")
+        } else if (files.length >= 4) {
+            setErrorMsg("only max 4 pic upload")
         } else {
-            const lat = state.data.coord.lat
-            const lon = state.data.coord.lon
-            const hash = geofire.geohashForLocation([lat,lon]);
+            const lat = state.data.city.coord.lat
+            const lon = state.data.city.coord.lon
+            const hash = geofire.geohashForLocation([lat, lon]);
             setErrorMsg(null)
             dispatch({
                 type: "POST",
                 data: {
-                    Uid: user.uid,
+                    uid: user.uid,
                     Geohash: hash,
-                    geopoint: [lat,lon],
-                    Product: "vegetable",
-                    url:url,
-                    productName:productName,
+                    geopoint: [lat, lon],
+                    type:"chemical",
+                    product: productName,
                     price: EcjectPrice,
-                    description: description
+                    description: description,
+                    url: url
                 },
                 files: files
             })
@@ -91,7 +76,7 @@ function Vegetables() {
 
                 <div className="formLinkImg"><label htmlFor="formQuestionImg"><i className="fa fa-camera upload-button"></i></label><input className="file-upload" type="file" id="formQuestionImg" accept="image/*" multiple onChange={uploadImgFile} /><i className="fas fa-link" onClick={() => setLinkAdd("add")}></i></div>
                 <div className="linkImgContainer">
-                    {linkAdd ? (<div><input type="url" onClick={e => setUrl(e.target.value)} onKeyPress={enterUrl} className="inputUrl" placeholder="Enter URL and press Enter key" /></div>) : (<></>)}
+                    {linkAdd ? (<div><input type="url" onChange={e => setUrl(e.target.value)} onKeyPress={enterUrl} className="inputUrl" placeholder="Enter URL and press Enter key" /></div>) : (<></>)}
                     <div className="showLinkImg">
                         <div className="seedimgGallry">
                             <span className="cencel">X</span>
@@ -107,26 +92,13 @@ function Vegetables() {
                 </div>
                 <div className="row">
                     <div>
-                        <label htmlFor="">Vegetables name</label>
+                        <label htmlFor="">Pesticide</label>
                         <div><input type="text" onChange={e => setProductName(e.target.value)} className="inputUrl " placeholder="Product Name" /></div>
                     </div>
-                    <div className="row VegetablesContainer">
-                        <div>
-                            <label htmlFor="">Price</label>
-                            <div><input type="number" onChange={e => setEcjectPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 100 ₹" /></div>
-                        </div>
-                        <div className="unit">
-                            <label htmlFor="" className="topLabel">unit</label><br />
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-outlined-label">unit</InputLabel>
-                                <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={weightUnit}
-                                    onChange={event => setWeightUnit(event.target.value)} label="Age">
-                                    {Unit.map(unit => (<MenuItem value={unit}><em>{unit}</em></MenuItem>))}
-                                </Select>
-                            </FormControl>
-                        </div>
+                    <div>
+                        <label htmlFor="">Price</label>
+                        <div><input type="number" onChange={e => setEcjectPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 100 ₹" /></div>
                     </div>
-
                 </div>
                 <h4>Description</h4>
                 <textarea type="textarea" onChange={e => setDescription(e.target.value)} defaultValue="" rows="4" cols="50" name="question" id="question" ></textarea>

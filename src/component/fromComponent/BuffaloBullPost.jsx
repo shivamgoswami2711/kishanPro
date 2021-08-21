@@ -5,12 +5,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import firebase from '../../firebase'
-import dataBrandAndBreed from '../Data'
 import { useStateValue } from "../../Stateprovider"
+import dataBrandAndBreed from '../Data'
 import 'firebase/auth';
+import 'firebase/firestore';
 
 const geofire = require('geofire-common');
-
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function CowBullPost() {
+export default function BuffaloBullPost() {
     const classes = useStyles();
     const [files, setFiles] = useState([]);
     const [EcjectPrice, setEcjectPrice] = useState(0);
@@ -33,10 +33,8 @@ function CowBullPost() {
     const animalAgearr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     const [state, dispatch] = useStateValue()
 
-
     // firebase 
     const auth = firebase.auth();
-    const db = firebase.firestore();
     const user = auth.currentUser;
     let allfiles = []
 
@@ -58,18 +56,22 @@ function CowBullPost() {
             setErrorMsg("Aminal Age is enpty")
         } else if (description > 251) {
             setErrorMsg("Description is long")
+        }
+        else if (files.length >= 4) {
+            setErrorMsg("only max 4 pic upload")
         } else {
-            const lat = state.data.coord.lat
-            const lon = state.data.coord.lon
-            const hash = geofire.geohashForLocation([lat,lon]);
+            const lat = state.data.city.coord.lat
+            const lon = state.data.city.coord.lon
+            const hash = geofire.geohashForLocation([lat, lon]);
             setErrorMsg(null)
-            dispatch({  
+            dispatch({
                 type: "POST",
                 data: {
-                    Uid: user.uid,
-                    animal: "OX",
+                    uid: user.uid,
+                    type: "animal",
+                    animal: "Bull",
                     Geohash: hash,
-                    geopoint: [lat,lon],
+                    geopoint: [lat, lon],
                     breed: breed,
                     price: EcjectPrice,
                     animalAge: animalAge,
@@ -143,4 +145,3 @@ function CowBullPost() {
     )
 }
 
-export default CowBullPost

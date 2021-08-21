@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -75,8 +75,10 @@ function Header() {
 
   const user = auth.currentUser;
 
-  // user not login 
-  if (!user) history.push("/login")
+  useEffect(() => {
+    // user not login 
+    if (!user) history.push("/login")
+  }, [])
 
 
   const uploadLocal = (data) => {
@@ -120,6 +122,7 @@ function Header() {
   const showClickImg = e => {
     setClickImg(e.target.src)
   }
+
 
   //  notification 
   const notification = e => {
@@ -304,11 +307,14 @@ function Header() {
         return ''
     }
   }
+
   return (
     <>
       <header>
         <div className="mainheader">
-          <div className="backArrow" onClick={()=>history.goBack()}>
+          <div className="backArrow" onClick={() => {
+            history.goBack()
+          }}>
             <i className="fas fa-arrow-left"></i>
           </div>
           <div className="logo"><img src="" alt="" /></div>

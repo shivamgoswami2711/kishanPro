@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Header from '../Header'
 import Leftheader from '../Leftheader'
 import { useStateValue } from "../../Stateprovider"
-import Carousel from '../Post/Carousel'
+import Carousel from '../Carousel'
 import firebase from 'firebase';
 import 'firebase/auth';
 import CommentShow from './CommentShow'
@@ -10,12 +10,27 @@ import CommentShow from './CommentShow'
 function FullPost() {
     const [state] = useStateValue()
     const [images, setImages] = useState([])
+    const [commentData, setCommentData] = useState([])
+    const userData = typeof state.useData === "undefined" ? {} : state.useData
+    const PostId = typeof state.PostId === "undefined" ? '' : state.PostId
 
     // firebase
     const db = firebase.firestore();
 
 
     useEffect(() => {
+        db.collection("comments").orderBy("timestamp","desc").limit(15)
+        .where("pid", "==", PostId)
+        .onSnapshot((querySnapshot) => {
+            const commentList = []
+            querySnapshot.forEach((doc) => {
+                const data = doc.data()
+                data.cid = doc.id
+                commentList.push(data)
+            })
+            setCommentData([])
+            setCommentData(commentList)
+        })
         // set img data
         setImages(
             state.Post.img.map((img, index) => ({
@@ -23,15 +38,33 @@ function FullPost() {
                 url: img
             }))
         );
-    }, [])
+    }, [state.PostId])
 
+    // delete comment
+    const DeleteComment = (cid) => {
+        if (window.confirm('You want to delette ?')) {
+            db.collection('comments').doc(cid).delete().catch((error) => {
+                alert(error.code)
+                console.log(error)
+            })
+        }
+    }
 
     return (
         <div>
-            <Header />
+            fullPost
+            <Header/>
             <Leftheader />
             <div className="postContainer fullPost">
+                <div className="PostProfileContainer top">
+                    <div className="profileCircle">
+                        <img src={userData.profilePic} alt="" />
+                    </div>
+                    <div className="CommentName">
+                        {userData.name}
+                    </div></div>
                 <div className="fullPostContainer">
+
                     <div className="PostMainContainer carouselBlock">
                         <Carousel images={images} />
                     </div>
@@ -49,11 +82,7 @@ function FullPost() {
                         </div>
                     </div>
                 </div>
-                {state.Comment.map((commentData) => {
-                    return (
-                    <CommentShow commentData={commentData} />
-                    )
-                })}
+                {commentData.map((commentData) => (<CommentShow commentData={commentData} DeleteComment={DeleteComment} />))}
             </div>
         </div>
     )

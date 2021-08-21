@@ -1,8 +1,10 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import firebase from 'firebase';
+import { PostTimeCalculate,ProfileCantainer } from '../Module'
 
-function Replyshow({ replyData }) {
-    const [isLoad, setIsLoad] = useState(false)
+
+function Replyshow({ replyData, deletePostRemove, updateComent }) {
+    const [editPost, setEditPost] = useState(false)
     const [updateCom, setUpdateCom] = useState('')
 
     // firebase
@@ -10,34 +12,28 @@ function Replyshow({ replyData }) {
     const db = firebase.firestore();
     const user = auth.currentUser;
 
-    console.log(replyData)
-    const { comment, uid, name, pic, cid, time } = replyData
+    const { comment, uid, name, pic, cid, timestamp, rid } = replyData
+    const [NewComment, setNewComment] = useState(comment)
 
-    const updateComent =()=>{
-    }
     return (
         <div className='commentContainer'>
             <div className="commentSubContainer reply">
                 <div className="profileCantainer">
-                    <div className="PostProfileContainer">
-                        <div className="profileCircle">
-                            <img src={pic} alt="" />
-                        </div>
-                        <div className="CommentName">
-                            {name}
-                        </div>
-                        <div className="commentTool">
-                            {user.uid === uid ? <div onClick={() => isLoad ? setIsLoad(false) : setIsLoad(true) }>
-                                <i class="fas fa-pencil-alt"></i>
-                            </div> : ""}
-                        </div>
-                    </div>
+                    <ProfileCantainer
+                        pic={replyData.pic}
+                        name={name} uid={uid}
+                        PostDelet={deletePostRemove}
+                        Edit={editPost}
+                        setEdit={setEditPost}
+                        time={timestamp}
+                        DeleteId={rid}
+                    />
                     <div>
-                    {isLoad ?
-                        <><textarea cols="45" onChange={e => setUpdateCom(e.target.value)}  className="comment textarea">{comment}</textarea><div className='buttonContainer'>
-                            <div onClick={updateComent} className="button">done</div></div></> :
-                        <div className="comment">{comment}</div>}
-                </div>
+                        {editPost ?
+                            <><textarea cols="45" onChange={e => setUpdateCom(e.target.value)} className="comment textarea">{NewComment}</textarea><div className='buttonContainer'>
+                                <div onClick={updateComent(rid)} className="button">done</div></div></> :
+                            <div className="comment">{NewComment}</div>}
+                    </div>
                 </div>
             </div>
         </div>

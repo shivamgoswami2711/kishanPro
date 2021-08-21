@@ -11,6 +11,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 const geofire = require('geofire-common');
 
+
 const useStyles = makeStyles((theme) => ({
     formControl: {
         minWidth: 120,
@@ -20,18 +21,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function DogPost() {
+
+export default function GoatPost() {
     const classes = useStyles();
     const [files, setFiles] = useState([]);
     const [EcjectPrice, setEcjectPrice] = useState(0);
     const [ClickImg, setClickImg] = useState('');
     const [breed, setBreed] = useState('')
-    const [animalAge, setAnimalAge] = useState(0)
     const [description, setDescription] = useState("")
-    const [gender, setGender] = useState('')
+    const [henWeight, setHenWeight] = useState('')
     const [errorMsg, setErrorMsg] = useState(null)
-    const animalAgearr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     const [state, dispatch] = useStateValue()
+
 
     // firebase 
     const auth = firebase.auth();
@@ -39,17 +40,7 @@ function DogPost() {
     const user = auth.currentUser;
     let allfiles = []
 
-    Array.prototype.unique = Array.prototype.unique || function () {
-        var arr = [];
-        this.reduce(function (hash, num) {
-            if (typeof hash[num] === 'undefined') {
-                hash[num] = 1;
-                arr.push(num);
-            }
-            return hash;
-        }, {});
-        return arr;
-    }
+    const removeImg = e => setFiles(files.filter((i, index) => index != e.target.id))
 
     function uploadImgFile(e) {
         // second time uplode
@@ -65,36 +56,33 @@ function DogPost() {
             setErrorMsg("breed not selected")
         } else if (EcjectPrice === 0) {
             setErrorMsg("price is enpty")
-        } else if (gender.length === 0) {
-            setErrorMsg("select gender")
-        } else if (animalAge === 0) {
-            setErrorMsg("Aminal Age is enpty")
+        } else if (henWeight.length === 0) {
+            setErrorMsg("weight is empty")
         } else if (description > 251) {
             setErrorMsg("Description is long")
+        } else if (files.length >= 4) {
+            setErrorMsg("only max 4 pic upload")
         } else {
-            const lat = state.data.coord.lat
-            const lon = state.data.coord.lon
-            const hash = geofire.geohashForLocation([lat,lon]);
+            const lat = state.data.city.coord.lat
+            const lon = state.data.city.coord.lon
+            const hash = geofire.geohashForLocation([lat, lon]);
             setErrorMsg(null)
             dispatch({
                 type: "POST",
                 data: {
-                    Uid: user.uid,
-                    animal: "dog",
+                    uid: user.uid,
                     Geohash: hash,
-                    geopoint: [lat,lon],
+                    geopoint: [lat, lon],
+                    animal: "hen",
+                    type:"animal",
                     breed: breed,
                     price: EcjectPrice,
-                    animalAge: animalAge,
-                    gender: gender,
                     description: description
                 },
                 files: files
             })
         }
     }
-
-    const removeImg = e => setFiles(files.filter((i, index) => index != e.target.id))
 
     return (
         <form action="">
@@ -103,30 +91,24 @@ function DogPost() {
             <div className="cowBullPostContainer">
                 <div className="cowBullPostSelect">
 
-                    <div className="formLinkImg"><label htmlFor="formQuestionImg"><i className="fa fa-camera upload-button"></i></label><input className="file-upload" type="file" id="formQuestionImg" accept="image/*" multiple onChange={uploadImgFile} /></div>
+                    <div className="formLinkImg"><label for="formQuestionImg"><i className="fa fa-camera upload-button"></i></label><input className="file-upload" type="file" id="formQuestionImg" accept="image/*" multiple onChange={uploadImgFile} /></div>
                     <label htmlFor="" className="topLabel">Breed</label><br />
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel id="demo-simple-select-outlined-label">Breed</InputLabel>
                         <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={breed}
                             onChange={event => setBreed(event.target.value)} label="Age">
                             <MenuItem value=""><em>None</em></MenuItem>
-                            {dataBrandAndBreed[3].map(breed => (<MenuItem value={breed}><em>{breed}</em></MenuItem>))}
+                            {dataBrandAndBreed[5].map(breed => (<MenuItem value={breed}><em>{breed}</em></MenuItem>))}
                             <MenuItem value="Other"><em>Other</em></MenuItem>
                         </Select>
                     </FormControl><br />
-
                     <div>
-                        <label className="topLabel" htmlFor="">Aminal Age</label><br />
-                        <FormControl variant="outlined" className={classes.formControl}>
-                            <InputLabel id="demo-simple-select-outlined-label">Age</InputLabel>
-                            <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={animalAge}
-                                onChange={event => setAnimalAge(event.target.value)} label="Age">
-                                <MenuItem value=""><em>None</em></MenuItem>
-                                {animalAgearr.map(age => (<MenuItem value={age}><em>{age + " year"}</em></MenuItem>))}
-                            </Select>
-                        </FormControl><br />
+                        <label htmlFor="">weight</label>
+                        <div><input type="number" onChange={e => setHenWeight(e.target.value)} className="inputUrl" placeholder="Ex. 1 kg" /></div>
                     </div>
                 </div>
+
+
                 <div className="cowBullPostWrite">
                     <div className="linkImgContainer">
                         <div className="showLinkImg">
@@ -142,22 +124,10 @@ function DogPost() {
                                 </div> : ""}
                         </div>
                     </div>
-                    <div className="animalfromLeftSelectionContainer">
+                    <div className="animalPricecontainer">
                         <div>
                             <label htmlFor="">Price</label>
                             <div><input type="number" onChange={e => setEcjectPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 10000 ₹" /></div>
-                        </div>
-                        <div>
-                            <label className="topLabel" htmlFor="gender">gender</label><br />
-                            <FormControl variant="outlined" className={classes.formControl}>
-                                <InputLabel id="demo-simple-select-outlined-label">gender</InputLabel>
-                                <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={gender}
-                                    onChange={event => setGender(event.target.value)} label="gender">
-                                    <MenuItem value=""><em>None</em></MenuItem>
-                                    <MenuItem value="Male"><em>Male</em></MenuItem>
-                                    <MenuItem value="Female"><em>Female</em></MenuItem>
-                                </Select>
-                            </FormControl><br />
                         </div>
                     </div>
                     <h4>Description</h4>
@@ -166,7 +136,8 @@ function DogPost() {
             </div>
             <div className="button formSubmit" onClick={animalFromSubmit}>Submit</div>
         </form>
+
+
     )
 }
 
-export default DogPost

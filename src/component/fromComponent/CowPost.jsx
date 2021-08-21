@@ -8,9 +8,9 @@ import firebase from '../../firebase'
 import dataBrandAndBreed from '../Data'
 import { useStateValue } from "../../Stateprovider"
 import 'firebase/auth';
-import 'firebase/firestore';
 
 const geofire = require('geofire-common');
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,7 +42,6 @@ export default function CowForm1() {
     const numberOfCalves = ["no", "bull calf", "heifer calf/calf"]
     const [state, dispatch] = useStateValue()
 
-
     // firebase 
     const auth = firebase.auth();
     const user = auth.currentUser;
@@ -58,6 +57,7 @@ export default function CowForm1() {
         if (allfiles.length > 0) {
             setFiles(Object.assign(allfiles, files))
         }
+
     };
     const animalFromSubmit = () => {
         if (breed.length === 0) {
@@ -80,18 +80,22 @@ export default function CowForm1() {
             setErrorMsg("select pregnancy detile")
         } else if (description > 251) {
             setErrorMsg("Description is long")
+        }else if (files.length >= 4) {
+            setErrorMsg("only max 4 pic upload")
         } else {
-            const lat = state.data.coord.lat
-            const lon = state.data.coord.lon
-            const hash = geofire.geohashForLocation([lat, lon]);
+            const lat = state.data.city.coord.lat
+            const lon = state.data.city.coord.lon
+            const hash = geofire.geohashForLocation([lat,lon]);
             setErrorMsg(null)
             dispatch({
                 type: "POST",
-                data: {
-                    Uid: user.uid,
+                data:
+                {
+                    uid: user.uid,
+                    animal: "Cow",
+                    type:"animal",
                     Geohash: hash,
-                    geopoint: [lat, lon],
-                    animal: "Buffalo",
+                    geopoint: [lat,lon],
                     breed: breed,
                     byaath: byaath,
                     produceMilk: produceMilk,
@@ -107,6 +111,7 @@ export default function CowForm1() {
         }
     }
 
+
     return (
         <form action="">
 
@@ -114,14 +119,14 @@ export default function CowForm1() {
             <div className="cowBullPostContainer">
                 <div className="cowBullPostSelect">
 
-                    <div className="formLinkImg"><label for="formQuestionImg"><i className="fa fa-camera upload-button"></i></label><input className="file-upload" type="file" id="formQuestionImg" accept="image/*" multiple onChange={uploadImgFile} /></div>
+                    <div className="formLinkImg"><label htmlFor="formQuestionImg"><i className="fa fa-camera upload-button"></i></label><input className="file-upload" type="file" id="formQuestionImg" accept="image/*" multiple onChange={uploadImgFile} /></div>
                     <label htmlFor="" className="topLabel">Breed</label><br />
                     <FormControl variant="outlined" className={classes.formControl}>
                         <InputLabel id="demo-simple-select-outlined-label">Breed</InputLabel>
                         <Select labelId="demo-simple-select-outlined-label" id="demo-simple-select-outlined" value={breed}
                             onChange={event => setBreed(event.target.value)} label="Age">
                             <MenuItem value=""><em>None</em></MenuItem>
-                            {dataBrandAndBreed[1].map(breed => (<MenuItem value={breed}><em>{breed}</em></MenuItem>))}
+                            {dataBrandAndBreed[0].map(breed => (<MenuItem value={breed}><em>{breed}</em></MenuItem>))}
                             <MenuItem value="Other"><em>Other</em></MenuItem>
                         </Select>
                     </FormControl><br />
@@ -156,7 +161,7 @@ export default function CowForm1() {
                                 </div> : ""}
                         </div>
                     </div>
-                    <div className="animalPricecontainer">
+                    <div className="row">
                         <div>
                             <label htmlFor="">Price</label>
                             <div><input type="number" onChange={e => setEcjectPrice(e.target.value)} className="inputUrl Price" placeholder="Ex. 10000 ₹" /></div>

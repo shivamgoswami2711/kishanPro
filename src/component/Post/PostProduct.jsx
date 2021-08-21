@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import ImageCarousel from "./Carousel";
-import { useHistory, Link } from "react-router-dom";
+import ImageCarousel from "../Carousel";
+import { useHistory} from "react-router-dom";
 import ImageData from '../asset/Index';
 import { useStateValue } from "../../Stateprovider"
 import "../../style/carousel.css";
 import firebase from 'firebase';
+import { makeid, PostTimeCalculate} from '../Module';
 import 'firebase/auth';
 
 function PostProduct({ data }) {
@@ -15,8 +16,7 @@ function PostProduct({ data }) {
     const [images, setImages] = useState([])
     const [commentData, setCommentData] = useState([])
     const [state, dispatch] = useStateValue()
-
-
+    const LogingUserData = typeof state.useData === 'undefined' ? '' : state.useData;
 
     const history = useHistory();
 
@@ -27,7 +27,6 @@ function PostProduct({ data }) {
 
     //  cleck like button then run
     useEffect(async () => {
-
         await db.collection(data.collection).doc(data.pid).onSnapshot(querySnapshot => {
             setPostRealTimeData(querySnapshot.data())
         })
@@ -44,7 +43,7 @@ function PostProduct({ data }) {
     //  data change then run 
     useEffect(async () => {
         // get user persnal
-        const docRefInfo = db.collection("user").doc(data.Uid);
+        const docRefInfo = db.collection("user").doc(data.uid);
         await docRefInfo.get().then(doc => {
             setUserData(doc.data())
         }).catch(error => {
@@ -64,19 +63,7 @@ function PostProduct({ data }) {
     useEffect(() => {
         getCommentData()
     }, [])
-    // create docName
 
-    function makeid() {
-        const length = 5
-        let result = '';
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const charactersLength = characters.length;
-        for (var i = 0; i < length; i++) {
-            result += characters.charAt(Math.floor(Math.random() *
-                charactersLength));
-        }
-        return result + new Date().getTime().toString();
-    }
 
     //  like count data 
     const likeCount = typeof postRealTimeData.likes !== 'undefined' ? postRealTimeData.likes : data.likes
@@ -94,9 +81,9 @@ function PostProduct({ data }) {
                 uid: user.uid,
                 pid: data.pid,
                 comment: comment,
-                name: state.useData.name,
-                pic: state.useData.profilePic,
-                time: new Date()
+                name: LogingUserData.name,
+                pic: LogingUserData.profilePic,
+                timestamp: new Date().getTime()
             }).then(e => {
                 console.log("comment add")
                 setComment('')
@@ -115,7 +102,7 @@ function PostProduct({ data }) {
             commentsList = []
             querySnapshot.forEach((doc) => {
                 const Comid = doc.data()
-                Comid.Cid = doc.id;
+                Comid.cid = doc.id;
                 commentsList.push(Comid)
             })
             setCommentData(commentsList)
@@ -126,7 +113,7 @@ function PostProduct({ data }) {
         dispatch({
             type: "comment",
             post: data,
-            comment: commentData
+            PostId: commentData[0].pid
         })
         history.push("/post/" + data.pid)
     }
@@ -143,7 +130,9 @@ function PostProduct({ data }) {
                         <ImageCarousel images={images} /> 
                     </div>
                     <div>
-                        <div><h2>{postRealTimeData.animal}</h2></div>
+                        <div>
+                            <span className="postTimeShow">{PostTimeCalculate(postRealTimeData.timestamp)}</span>
+                            <h2>{postRealTimeData.animal}</h2></div>
                         <div className='price'><label htmlFor="price">price</label> {postRealTimeData.price}</div>
                         <div><label htmlFor="age">age</label> {postRealTimeData.animalAge} year</div>
                     </div>
